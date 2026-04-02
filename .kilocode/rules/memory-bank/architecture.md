@@ -1,120 +1,38 @@
-# System Patterns: Next.js Starter Template
+# System Patterns: therAPI Discovery MVP
 
 ## Architecture Overview
 
-```
-src/
-├── app/                    # Next.js App Router
-│   ├── layout.tsx          # Root layout + metadata
-│   ├── page.tsx            # Home page
-│   ├── globals.css         # Tailwind imports + global styles
-│   └── favicon.ico         # Site icon
-└── (expand as needed)
-    ├── components/         # React components (add when needed)
-    ├── lib/                # Utilities and helpers (add when needed)
-    └── db/                 # Database files (add via recipe)
-```
-
-## Key Design Patterns
-
-### 1. App Router Pattern
-
-Uses Next.js App Router with file-based routing:
-```
-src/app/
-├── page.tsx           # Route: /
-├── about/page.tsx     # Route: /about
-├── blog/
-│   ├── page.tsx       # Route: /blog
-│   └── [slug]/page.tsx # Route: /blog/:slug
-└── api/
-    └── route.ts       # API Route: /api
-```
-
-### 2. Component Organization Pattern (When Expanding)
+Implemented pipeline in `therapi_old/src`:
 
 ```
-src/components/
-├── ui/                # Reusable UI components (Button, Card, etc.)
-├── layout/            # Layout components (Header, Footer)
-├── sections/          # Page sections (Hero, Features, etc.)
-└── forms/             # Form components
+Capture -> Infer -> Registry -> Expose
 ```
 
-### 3. Server Components by Default
+### Modules
 
-All components are Server Components unless marked with `"use client"`:
-```tsx
-// Server Component (default) - can fetch data, access DB
-export default function Page() {
-  return <div>Server rendered</div>;
-}
+- `lib/discovery-registry.ts`
+  - In-memory endpoint registry
+  - Stores captured exchanges grouped by `METHOD path`
+  - Returns inferred endpoint snapshots
+- `lib/schema-inference.ts`
+  - Probabilistic schema inference over observed values
+  - Tracks dominant type, required ratio, nested object/array structure
+- `lib/openapi-generator.ts`
+  - Converts inferred schemas to OpenAPI 3.1-compatible path schemas
+  - Marks fields as required when observed ratio is >= 0.95
+- `lib/mock-generator.ts`
+  - Generates deterministic mock payloads from inferred schema trees
 
-// Client Component - for interactivity
-"use client";
-export default function Counter() {
-  const [count, setCount] = useState(0);
-  return <button onClick={() => setCount(c => c + 1)}>{count}</button>;
-}
-```
+### API Surface
 
-### 4. Layout Pattern
+- `POST /api/capture` — add runtime sample
+- `GET /api/endpoints` — inspect inferred endpoint snapshots
+- `GET /api/openapi` — export reconstructed OpenAPI document
+- `GET /api/mock` — generate mock response for discovered endpoint
 
-Layouts wrap pages and can be nested:
-```tsx
-// src/app/layout.tsx - Root layout
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <html lang="en">
-      <body>{children}</body>
-    </html>
-  );
-}
+## Key Design Choices
 
-// src/app/dashboard/layout.tsx - Nested layout
-export default function DashboardLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="flex">
-      <Sidebar />
-      <main>{children}</main>
-    </div>
-  );
-}
-```
-
-## Styling Conventions
-
-### Tailwind CSS Usage
-- Utility classes directly on elements
-- Component composition for repeated patterns
-- Responsive: `sm:`, `md:`, `lg:`, `xl:`
-
-### Common Patterns
-```tsx
-// Container
-<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-// Responsive grid
-<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-// Flexbox centering
-<div className="flex items-center justify-center">
-```
-
-## File Naming Conventions
-
-- Components: PascalCase (`Button.tsx`, `Header.tsx`)
-- Utilities: camelCase (`utils.ts`, `helpers.ts`)
-- Pages/Routes: lowercase (`page.tsx`, `layout.tsx`)
-- Directories: kebab-case (`api-routes/`) or lowercase (`components/`)
-
-## State Management
-
-For simple needs:
-- `useState` for local component state
-- `useContext` for shared state
-- Server Components for data fetching
-
-For complex needs (add when necessary):
-- Zustand for client state
-- React Query for server state
+1. **In-memory first**: keeps MVP simple and fast to iterate.
+2. **Probabilistic schema**: supports partially observed and evolving payloads.
+3. **Contract from usage**: OpenAPI is generated dynamically from runtime evidence.
+4. **Composable modules**: inference/registry/expose are separated for future persistence/versioning.
