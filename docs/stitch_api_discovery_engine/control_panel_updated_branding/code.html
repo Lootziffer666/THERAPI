@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>THERAPI - API Discovery Tool</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-low": "#f2f4f6",
+                        "surface-container-highest": "#e0e3e5",
+                        "on-tertiary-container": "#f2fffb",
+                        "inverse-surface": "#2d3133",
+                        "tertiary": "#00685d",
+                        "surface-tint": "#0059c8",
+                        "secondary-fixed": "#cce5ff",
+                        "inverse-primary": "#afc6ff",
+                        "outline-variant": "#c2c6d6",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-fixed": "#00201c",
+                        "on-background": "#191c1e",
+                        "secondary-fixed-dim": "#a8caea",
+                        "on-error-container": "#93000a",
+                        "on-surface": "#191c1e",
+                        "on-surface-variant": "#424754",
+                        "outline": "#727786",
+                        "secondary-container": "#bcdeff",
+                        "background": "#f7f9fb",
+                        "primary-fixed": "#d9e2ff",
+                        "inverse-on-surface": "#eff1f3",
+                        "error-container": "#ffdad6",
+                        "primary-fixed-dim": "#afc6ff",
+                        "surface-dim": "#d8dadc",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-fixed-variant": "#004299",
+                        "surface-variant": "#e0e3e5",
+                        "on-primary": "#ffffff",
+                        "secondary": "#40627d",
+                        "primary-container": "#1f6feb",
+                        "tertiary-container": "#008376",
+                        "error": "#ba1a1a",
+                        "surface-container-high": "#e6e8ea",
+                        "on-secondary-container": "#41627e",
+                        "primary": "#0057c3",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-fixed-dim": "#4fdbc8",
+                        "on-secondary-fixed": "#001e31",
+                        "surface": "#f7f9fb",
+                        "tertiary-fixed": "#71f8e4",
+                        "on-error": "#ffffff",
+                        "on-tertiary-fixed-variant": "#005048",
+                        "on-secondary-fixed-variant": "#284a64",
+                        "surface-container": "#eceef0",
+                        "surface-bright": "#f7f9fb",
+                        "on-primary-fixed": "#001944",
+                        "on-primary-container": "#fffcff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .architect-shadow { shadow: 0px 20px 40px rgba(0, 25, 68, 0.06); }
+        .primary-gradient { background: linear-gradient(135deg, #0057C3 0%, #1F6FEB 100%); }
+        .glass-panel { background: rgba(247, 249, 251, 0.8); backdrop-filter: blur(12px); }
+    </style>
+</head>
+<body class="bg-background text-on-surface antialiased flex h-screen overflow-hidden">
+<!-- SideNavBar (Authority Source: JSON) -->
+<aside class="flex flex-col h-full py-6 px-4 bg-slate-50 dark:bg-slate-900 w-[240px] border-r-0 z-10">
+<div class="mb-10 px-2 flex flex-col"><img alt="THERAPI Logo" class="h-auto w-full max-w-[160px] object-contain" src="https://lh3.googleusercontent.com/aida/ADBb0uiv51WmQ3o1O11ZgGGK-Tyk3nHJWq66oBillbqWSRKq3QjljKcL9Cvutlhj8U0uPYQoSRm2E6a7UUKXYaHWm23TFabLHjLW112M4K0lejEMhILriZKV4vSGCORXSXnShWDJMm8vkIHK6RRicGwuTvuN7s4yk8LGVxcsov7qeywImRxeZELYIvHxUue1oKDeeSRtupTRVgezWVu7PIGmT31l2nfA7sBazp0UyXUiOKeCgghBfm3YJVt0U4cxmgSDvlBb7zCPxU_K9w"/></div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-[10px] dark:text-blue-400 font-semibold hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors duration-200 text-[#006B5F]" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+<span class="text-sm">Control Panel</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-[10px] text-slate-500 dark:text-slate-400 font-medium hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">explore</span>
+<span class="text-sm">Endpoint Explorer</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-[10px] text-slate-500 dark:text-slate-400 font-medium hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">compare_arrows</span>
+<span class="text-sm">Schema Drift</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-[10px] text-slate-500 dark:text-slate-400 font-medium hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">radar</span>
+<span class="text-sm">Capture Inspector</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-[10px] text-slate-500 dark:text-slate-400 font-medium hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">file_export</span>
+<span class="text-sm">OpenAPI Export</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-[10px] text-slate-500 dark:text-slate-400 font-medium hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">folder_zip</span>
+<span class="text-sm">Collections Export</span>
+</a>
+<div class="pt-4 mt-4 border-t border-slate-200/50">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-[10px] text-slate-500 dark:text-slate-400 font-medium hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span class="text-sm">Settings</span>
+</a>
+</div>
+</nav>
+<div class="mt-auto px-2">
+<div class="flex items-center gap-3 p-2 rounded-[10px] bg-slate-200/50 dark:bg-slate-800/50">
+<div class="w-8 h-8 rounded-[10px] text-white flex items-center justify-center font-bold text-xs bg-[#006B5F]">TH</div>
+<div class="flex flex-col">
+<span class="text-xs font-bold text-slate-900 dark:text-white">v2.4.0-stable</span>
+<span class="text-[10px] text-slate-500">System Ready</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col h-full bg-surface-container-lowest">
+<!-- TopAppBar (Authority Source: JSON) -->
+<header class="flex items-center justify-end w-full px-8 gap-4 h-14 bg-white dark:bg-slate-950 z-20">
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2 px-3 py-1 rounded-full bg-tertiary-container/10 text-tertiary text-xs font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary animate-pulse"></span>
+                    Proxy Status: Online
+                </div>
+<div class="flex items-center gap-2 px-3 py-1 rounded-full bg-secondary-container/30 text-on-secondary-container text-xs font-semibold">
+<span class="material-symbols-outlined text-[14px]">link</span>
+                    Target Base URL: https://api.production.v1
+                </div>
+<div class="flex items-center gap-2 px-3 py-1 rounded-full bg-primary-container/10 text-primary text-xs font-semibold">
+<span class="material-symbols-outlined text-[14px]">sensors</span>
+                    Capture Rate: 100%
+                </div>
+</div>
+</header>
+<!-- Page Canvas -->
+<div class="flex-1 overflow-y-auto p-10">
+<!-- Discovery Breadcrumb (Signature Component) -->
+<div class="mb-12 flex items-baseline gap-[32pt]">
+<h1 class="text-4xl font-extrabold tracking-tight text-on-surface">Control Panel</h1>
+<span class="text-sm font-semibold uppercase tracking-widest text-on-surface-variant/60">Session ID: TH-992-PX</span>
+</div>
+<!-- Dashboard Grid -->
+<div class="grid grid-cols-12 gap-8">
+<!-- Left Column (4/12) -->
+<div class="col-span-12 lg:col-span-5 flex flex-col gap-8">
+<!-- Proxy Status Card -->
+<section class="bg-surface-container-low p-6 rounded-[10px]">
+<div class="flex items-center justify-between mb-6">
+<h2 class="text-lg font-bold text-on-surface">Proxy Status</h2>
+<button class="flex items-center gap-2 px-3 py-1.5 rounded-[10px] text-xs font-bold text-on-surface-variant hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-sm">refresh</span>
+                                Refresh
+                            </button>
+</div>
+<div class="grid grid-cols-2 gap-y-6">
+<div>
+<p class="text-[10px] font-bold uppercase tracking-wider text-on-surface-variant opacity-60">Status</p>
+<p class="text-sm font-semibold text-tertiary mt-1 flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span> online
+                                </p>
+</div>
+<div>
+<p class="text-[10px] font-bold uppercase tracking-wider text-on-surface-variant opacity-60">Host</p>
+<p class="text-sm font-semibold text-on-surface mt-1">localhost</p>
+</div>
+<div>
+<p class="text-[10px] font-bold uppercase tracking-wider text-on-surface-variant opacity-60">Port</p>
+<p class="text-sm font-semibold text-on-surface mt-1">8080</p>
+</div>
+<div>
+<p class="text-[10px] font-bold uppercase tracking-wider text-on-surface-variant opacity-60">Uptime</p>
+<p class="text-sm font-semibold text-on-surface mt-1">12h 4m</p>
+</div>
+</div>
+</section>
+<!-- Capture Config Form -->
+<section class="bg-surface-container-low p-6 rounded-[10px]">
+<h2 class="text-lg font-bold text-on-surface mb-6">Capture Configuration</h2>
+<form class="space-y-5">
+<div class="space-y-2">
+<label class="text-[10px] font-bold uppercase tracking-wider text-on-surface-variant opacity-60 px-1">Host Address</label>
+<input class="w-full bg-surface-container-highest border-none rounded-[10px] focus:ring-0 focus:border-b-2 focus:border-primary transition-all text-sm font-medium py-3 px-4" type="text" value="0.0.0.0"/>
+</div>
+<div class="space-y-2">
+<label class="text-[10px] font-bold uppercase tracking-wider text-on-surface-variant opacity-60 px-1">Proxy Port</label>
+<input class="w-full bg-surface-container-highest border-none rounded-[10px] focus:ring-0 focus:border-b-2 focus:border-primary transition-all text-sm font-medium py-3 px-4" type="text" value="8080"/>
+</div>
+<div class="space-y-2">
+<label class="text-[10px] font-bold uppercase tracking-wider text-on-surface-variant opacity-60 px-1">Target Base URL</label>
+<input class="w-full bg-surface-container-highest border-none rounded-[10px] focus:ring-0 focus:border-b-2 focus:border-primary transition-all text-sm font-medium py-3 px-4" type="text" value="https://api.production.v1"/>
+</div>
+<div class="space-y-2">
+<label class="text-[10px] font-bold uppercase tracking-wider text-on-surface-variant opacity-60 px-1">Store Path</label>
+<input class="w-full bg-surface-container-highest border-none rounded-[10px] focus:ring-0 focus:border-b-2 focus:border-primary transition-all text-sm font-medium py-3 px-4" type="text" value="./captures/production_main"/>
+</div>
+<div class="pt-4 flex items-center gap-3">
+<button class="flex-1 text-white text-sm font-bold py-3 rounded-[10px] hover:opacity-90 transition-all bg-[#006B5F]" type="button">Save Config</button>
+<button class="px-6 bg-surface-container-high text-on-surface text-sm font-bold py-3 rounded-[10px] hover:bg-surface-container-highest transition-all" type="button">Reset</button>
+<button class="px-4 text-tertiary hover:bg-tertiary-container/10 rounded-[10px] transition-all" type="button">
+<span class="material-symbols-outlined">play_circle</span>
+</button>
+</div>
+</form>
+</section>
+</div>
+<!-- Right Column (8/12) -->
+<div class="col-span-12 lg:col-span-7 flex flex-col gap-8">
+<!-- Quick Actions Bar -->
+<div class="flex items-center gap-4">
+<button class="flex items-center gap-2 px-5 py-3 rounded-[10px] bg-tertiary-container/10 text-tertiary text-sm font-bold hover:bg-tertiary-container/20 transition-all">
+<span class="material-symbols-outlined text-[18px]">file_download</span>
+                            Export OpenAPI
+                        </button>
+<button class="flex items-center gap-2 px-5 py-3 rounded-[10px] bg-secondary-container/50 text-on-secondary-container text-sm font-bold hover:bg-secondary-container transition-all">
+<span class="material-symbols-outlined text-[18px]">archive</span>
+                            Export Collections
+                        </button>
+</div>
+<!-- Endpoint Overview Table -->
+<section class="bg-surface-container-low rounded-[10px] overflow-hidden">
+<div class="p-6">
+<h2 class="text-lg font-bold text-on-surface mb-2">Endpoint Overview</h2>
+<p class="text-sm text-on-surface-variant opacity-70">Real-time discovery of active API pathways</p>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-high/50">
+<th class="px-6 py-3 text-[10px] font-bold uppercase tracking-wider text-on-surface-variant opacity-60">Method</th>
+<th class="px-6 py-3 text-[10px] font-bold uppercase tracking-wider text-on-surface-variant opacity-60">Path</th>
+<th class="px-6 py-3 text-[10px] font-bold uppercase tracking-wider text-on-surface-variant opacity-60">Samples</th>
+<th class="px-6 py-3 text-[10px] font-bold uppercase tracking-wider text-on-surface-variant opacity-60">Versions</th>
+<th class="px-6 py-3 text-[10px] font-bold uppercase tracking-wider text-on-surface-variant opacity-60">Captures</th>
+<th class="px-6 py-3 text-[10px] font-bold uppercase tracking-wider text-on-surface-variant opacity-60">Last Changed</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-high/20">
+<tr class="hover:bg-surface-container-high transition-colors group cursor-pointer">
+<td class="px-6 py-5">
+<span class="px-2 py-0.5 rounded-full bg-tertiary-container/20 text-tertiary text-[10px] font-extrabold">GET</span>
+</td>
+<td class="px-6 py-5">
+<p class="text-sm font-semibold text-on-surface">/v1/auth/session</p>
+</td>
+<td class="px-6 py-5 text-sm font-medium text-on-surface-variant">42</td>
+<td class="px-6 py-5 text-sm font-medium text-on-surface-variant">2</td>
+<td class="px-6 py-5 text-sm font-medium text-on-surface-variant">1.2k</td>
+<td class="px-6 py-5 text-sm font-medium text-on-surface-variant">2m ago</td>
+</tr>
+<tr class="hover:bg-surface-container-high transition-colors group cursor-pointer">
+<td class="px-6 py-5">
+<span class="px-2 py-0.5 rounded-full bg-primary-container/20 text-primary text-[10px] font-extrabold">POST</span>
+</td>
+<td class="px-6 py-5">
+<p class="text-sm font-semibold text-on-surface">/v1/users/register</p>
+</td>
+<td class="px-6 py-5 text-sm font-medium text-on-surface-variant">12</td>
+<td class="px-6 py-5 text-sm font-medium text-on-surface-variant">1</td>
+<td class="px-6 py-5 text-sm font-medium text-on-surface-variant">248</td>
+<td class="px-6 py-5 text-sm font-medium text-on-surface-variant">14m ago</td>
+</tr>
+<tr class="hover:bg-surface-container-high transition-colors group cursor-pointer">
+<td class="px-6 py-5">
+<span class="px-2 py-0.5 rounded-full bg-on-secondary-fixed-variant/20 text-secondary text-[10px] font-extrabold">PUT</span>
+</td>
+<td class="px-6 py-5">
+<p class="text-sm font-semibold text-on-surface">/v1/profile/update</p>
+</td>
+<td class="px-6 py-5 text-sm font-medium text-on-surface-variant">8</td>
+<td class="px-6 py-5 text-sm font-medium text-on-surface-variant">3</td>
+<td class="px-6 py-5 text-sm font-medium text-on-surface-variant">152</td>
+<td class="px-6 py-5 text-sm font-medium text-on-surface-variant">1h ago</td>
+</tr>
+<tr class="hover:bg-surface-container-high transition-colors group cursor-pointer">
+<td class="px-6 py-5">
+<span class="px-2 py-0.5 rounded-full bg-error-container/40 text-error text-[10px] font-extrabold">DELETE</span>
+</td>
+<td class="px-6 py-5">
+<p class="text-sm font-semibold text-on-surface">/v1/assets/:id</p>
+</td>
+<td class="px-6 py-5 text-sm font-medium text-on-surface-variant">2</td>
+<td class="px-6 py-5 text-sm font-medium text-on-surface-variant">1</td>
+<td class="px-6 py-5 text-sm font-medium text-on-surface-variant">34</td>
+<td class="px-6 py-5 text-sm font-medium text-on-surface-variant">6h ago</td>
+</tr>
+<tr class="hover:bg-surface-container-high transition-colors group cursor-pointer">
+<td class="px-6 py-5">
+<span class="px-2 py-0.5 rounded-full bg-tertiary-container/20 text-tertiary text-[10px] font-extrabold">GET</span>
+</td>
+<td class="px-6 py-5">
+<p class="text-sm font-semibold text-on-surface">/v1/system/health</p>
+</td>
+<td class="px-6 py-5 text-sm font-medium text-on-surface-variant">1k+</td>
+<td class="px-6 py-5 text-sm font-medium text-on-surface-variant">1</td>
+<td class="px-6 py-5 text-sm font-medium text-on-surface-variant">89k</td>
+<td class="px-6 py-5 text-sm font-medium text-on-surface-variant">Just now</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-6 bg-surface-container-low flex justify-center">
+<button class="text-sm font-bold hover:underline text-[#1F6FEB]">View All 156 Endpoints</button>
+</div>
+</section>
+<!-- Real-time Capture Feed (Bonus Density Component) -->
+<section class="bg-surface-container-low p-6 rounded-[10px]">
+<div class="flex items-center justify-between mb-4">
+<h2 class="text-lg font-bold text-on-surface">Active Capture Feed</h2>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Streaming</span>
+</div>
+</div>
+<div class="space-y-3">
+<div class="p-3 bg-surface-container-highest/50 rounded-[10px] flex items-center justify-between">
+<div class="flex items-center gap-4">
+<span class="text-xs font-bold text-tertiary w-10">200</span>
+<span class="text-xs font-semibold text-on-surface">GET /v1/auth/session</span>
+</div>
+<span class="text-[10px] font-medium text-on-surface-variant">142ms</span>
+</div>
+<div class="p-3 bg-surface-container-highest/50 rounded-[10px] flex items-center justify-between">
+<div class="flex items-center gap-4">
+<span class="text-xs font-bold text-tertiary w-10">200</span>
+<span class="text-xs font-semibold text-on-surface">GET /v1/system/health</span>
+</div>
+<span class="text-[10px] font-medium text-on-surface-variant">24ms</span>
+</div>
+<div class="p-3 bg-surface-container-highest/50 rounded-[10px] flex items-center justify-between">
+<div class="flex items-center gap-4">
+<span class="text-xs font-bold text-primary w-10">201</span>
+<span class="text-xs font-semibold text-on-surface">POST /v1/users/register</span>
+</div>
+<span class="text-[10px] font-medium text-on-surface-variant">512ms</span>
+</div>
+</div>
+</section>
+</div>
+</div>
+</div>
+</main>
+</body></html>

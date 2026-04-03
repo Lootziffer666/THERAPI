@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>THERAPI - Endpoint Explorer</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-low": "#f2f4f6",
+                        "surface-container-highest": "#e0e3e5",
+                        "on-tertiary-container": "#f2fffb",
+                        "inverse-surface": "#2d3133",
+                        "tertiary": "#00685d",
+                        "surface-tint": "#0059c8",
+                        "secondary-fixed": "#cce5ff",
+                        "inverse-primary": "#afc6ff",
+                        "outline-variant": "#c2c6d6",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-fixed": "#00201c",
+                        "on-background": "#191c1e",
+                        "secondary-fixed-dim": "#a8caea",
+                        "on-error-container": "#93000a",
+                        "on-surface": "#191c1e",
+                        "on-surface-variant": "#424754",
+                        "outline": "#727786",
+                        "secondary-container": "#bcdeff",
+                        "background": "#f7f9fb",
+                        "primary-fixed": "#d9e2ff",
+                        "inverse-on-surface": "#eff1f3",
+                        "error-container": "#ffdad6",
+                        "primary-fixed-dim": "#afc6ff",
+                        "surface-dim": "#d8dadc",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-fixed-variant": "#004299",
+                        "surface-variant": "#e0e3e5",
+                        "on-primary": "#ffffff",
+                        "secondary": "#40627d",
+                        "primary-container": "#1f6feb",
+                        "tertiary-container": "#008376",
+                        "error": "#ba1a1a",
+                        "surface-container-high": "#e6e8ea",
+                        "on-secondary-container": "#41627e",
+                        "primary": "#0057c3",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-fixed-dim": "#4fdbc8",
+                        "on-secondary-fixed": "#001e31",
+                        "surface": "#f7f9fb",
+                        "tertiary-fixed": "#71f8e4",
+                        "on-error": "#ffffff",
+                        "on-tertiary-fixed-variant": "#005048",
+                        "on-secondary-fixed-variant": "#284a64",
+                        "surface-container": "#eceef0",
+                        "surface-bright": "#f7f9fb",
+                        "on-primary-fixed": "#001944",
+                        "on-primary-container": "#fffcff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    </style>
+</head>
+<body class="bg-background text-on-surface antialiased flex h-screen overflow-hidden">
+<!-- SideNavBar (Authority Source: SCREEN_29) -->
+<aside class="flex flex-col h-full py-6 px-4 bg-slate-50 dark:bg-slate-900 w-[240px] border-r border-slate-200/50 z-10">
+<div class="mb-10 px-2 flex flex-col">
+<img alt="THERAPI Logo" class="h-auto w-full max-w-[160px] object-contain" src="https://lh3.googleusercontent.com/aida/ADBb0uiv51WmQ3o1O11ZgGGK-Tyk3nHJWq66oBillbqWSRKq3QjljKcL9Cvutlhj8U0uPYQoSRm2E6a7UUKXYaHWm23TFabLHjLW112M4K0lejEMhILriZKV4vSGCORXSXnShWDJMm8vkIHK6RRicGwuTvuN7s4yk8LGVxcsov7qeywImRxeZELYIvHxUue1oKDeeSRtupTRVgezWVu7PIGmT31l2nfA7sBazp0UyXUiOKeCgghBfm3YJVt0U4cxmgSDvlBb7zCPxU_K9w"/>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-[10px] text-slate-500 dark:text-slate-400 font-medium hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+<span class="text-sm">Control Panel</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-[10px] text-[#006B5F] bg-slate-200/50 dark:bg-slate-800/50 font-semibold hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">explore</span>
+<span class="text-sm">Endpoint Explorer</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-[10px] text-slate-500 dark:text-slate-400 font-medium hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">compare_arrows</span>
+<span class="text-sm">Schema Drift</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-[10px] text-slate-500 dark:text-slate-400 font-medium hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">radar</span>
+<span class="text-sm">Capture Inspector</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-[10px] text-slate-500 dark:text-slate-400 font-medium hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">file_export</span>
+<span class="text-sm">OpenAPI Export</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-[10px] text-slate-500 dark:text-slate-400 font-medium hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">folder_zip</span>
+<span class="text-sm">Collections Export</span>
+</a>
+<div class="pt-4 mt-4 border-t border-slate-200/50">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-[10px] text-slate-500 dark:text-slate-400 font-medium hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span class="text-sm">Settings</span>
+</a>
+</div>
+</nav>
+<div class="mt-auto px-2">
+<div class="flex items-center gap-3 p-2 rounded-[10px] bg-slate-200/50 dark:bg-slate-800/50">
+<div class="w-8 h-8 rounded-[10px] text-white flex items-center justify-center font-bold text-xs bg-[#006B5F]">TH</div>
+<div class="flex flex-col">
+<span class="text-xs font-bold text-slate-900 dark:text-white">v2.4.0-stable</span>
+<span class="text-[10px] text-slate-500">System Ready</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col h-full bg-surface-container-lowest">
+<!-- TopAppBar (Matched to SCREEN_29) -->
+<header class="flex items-center justify-end w-full px-8 gap-4 h-14 bg-white dark:bg-slate-950 z-20 border-b border-slate-100 dark:border-slate-800">
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2 px-3 py-1 rounded-full bg-tertiary-container/10 text-tertiary text-xs font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary animate-pulse"></span>
+                    Proxy Status: Online
+                </div>
+<div class="flex items-center gap-2 px-3 py-1 rounded-full bg-secondary-container/30 text-on-secondary-container text-xs font-semibold">
+<span class="material-symbols-outlined text-[14px]">link</span>
+                    Target Base URL: https://api.production.v1
+                </div>
+<div class="flex items-center gap-2 px-3 py-1 rounded-full bg-primary-container/10 text-primary text-xs font-semibold">
+<span class="material-symbols-outlined text-[14px]">sensors</span>
+                    Capture Rate: 100%
+                </div>
+</div>
+</header>
+<!-- Page Canvas -->
+<div class="flex-1 overflow-y-auto p-10">
+<!-- Header Section (Matched spacing to SCREEN_29) -->
+<div class="mb-12 flex items-baseline gap-[32pt]">
+<h1 class="text-4xl font-extrabold tracking-tight text-on-surface">Endpoint Explorer</h1>
+<span class="text-sm font-semibold uppercase tracking-widest text-on-surface-variant/60">Audit and inspect active API definitions</span>
+</div>
+<!-- Dashboard Grid -->
+<div class="grid grid-cols-12 gap-8">
+<!-- Left Column: Endpoint List -->
+<div class="col-span-12 lg:col-span-5 flex flex-col gap-8">
+<div class="bg-surface-container-low p-6 rounded-[10px]">
+<div class="flex items-center justify-between mb-6">
+<h2 class="text-lg font-bold text-on-surface">42 Endpoints Tracked</h2>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer" data-icon="sort">sort</span>
+</div>
+<div class="space-y-4">
+<!-- Active Item -->
+<div class="bg-surface-container-lowest p-4 rounded-[10px] border-l-4 border-[#006B5F] shadow-sm cursor-pointer">
+<div class="flex items-center gap-2 mb-2">
+<span class="px-2 py-0.5 bg-primary-container text-white text-[9px] font-bold rounded">GET</span>
+<span class="text-xs font-bold text-[#006B5F] truncate">/v1/user/profile</span>
+</div>
+<div class="flex justify-between items-center text-[10px] text-on-surface-variant font-medium">
+<span>auth-service</span>
+<span class="text-tertiary">98.2% uptime</span>
+</div>
+</div>
+<div class="bg-surface-container-highest/30 p-4 rounded-[10px] hover:bg-surface-container-highest transition-colors cursor-pointer">
+<div class="flex items-center gap-2 mb-2">
+<span class="px-2 py-0.5 bg-primary-container text-white text-[9px] font-bold rounded">POST</span>
+<span class="text-xs font-bold text-on-surface truncate">/v1/auth/login</span>
+</div>
+<div class="flex justify-between items-center text-[10px] text-on-surface-variant font-medium">
+<span>auth-service</span>
+<span class="text-tertiary">100% uptime</span>
+</div>
+</div>
+<div class="bg-surface-container-highest/30 p-4 rounded-[10px] hover:bg-surface-container-highest transition-colors cursor-pointer">
+<div class="flex items-center gap-2 mb-2">
+<span class="px-2 py-0.5 bg-on-secondary-fixed-variant text-white text-[9px] font-bold rounded">PUT</span>
+<span class="text-xs font-bold text-on-surface truncate">/v2/orders/{id}</span>
+</div>
+<div class="flex justify-between items-center text-[10px] text-on-surface-variant font-medium">
+<span>payment-gateway</span>
+<span class="text-error">92.4% uptime</span>
+</div>
+</div>
+<div class="bg-surface-container-highest/30 p-4 rounded-[10px] hover:bg-surface-container-highest transition-colors cursor-pointer">
+<div class="flex items-center gap-2 mb-2">
+<span class="px-2 py-0.5 bg-error text-white text-[9px] font-bold rounded">DELETE</span>
+<span class="text-xs font-bold text-on-surface truncate">/v1/session/logout</span>
+</div>
+<div class="flex justify-between items-center text-[10px] text-on-surface-variant font-medium">
+<span>auth-service</span>
+<span class="text-tertiary">99.9% uptime</span>
+</div>
+</div>
+<div class="bg-surface-container-highest/30 p-4 rounded-[10px] hover:bg-surface-container-highest transition-colors cursor-pointer">
+<div class="flex items-center gap-2 mb-2">
+<span class="px-2 py-0.5 bg-primary-container text-white text-[9px] font-bold rounded">GET</span>
+<span class="text-xs font-bold text-on-surface truncate">/v1/products/search</span>
+</div>
+<div class="flex justify-between items-center text-[10px] text-on-surface-variant font-medium">
+<span>public-api</span>
+<span class="text-tertiary">99.1% uptime</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Details & Logs -->
+<div class="col-span-12 lg:col-span-7 flex flex-col gap-8">
+<!-- Filters and Search -->
+<div class="bg-surface-container-low p-4 rounded-[10px] flex flex-wrap items-center gap-4">
+<div class="flex-1 min-w-[200px] relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-sm">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container-highest border-none rounded-[10px] text-sm focus:ring-0 placeholder:text-outline/60" placeholder="Search paths..." type="text"/>
+</div>
+<div class="flex items-center gap-2">
+<span class="px-3 py-1 bg-[#006B5F] text-white text-[10px] font-bold rounded-full">ALL</span>
+<span class="px-3 py-1 bg-surface-container-high text-on-surface-variant text-[10px] font-bold rounded-full hover:bg-outline-variant cursor-pointer transition-colors">AUTH</span>
+<span class="px-3 py-1 bg-surface-container-high text-on-surface-variant text-[10px] font-bold rounded-full hover:bg-outline-variant cursor-pointer transition-colors">PUBLIC</span>
+</div>
+</div>
+<!-- Execution Summary Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="bg-surface-container-low p-6 rounded-[10px]">
+<div class="flex items-center gap-3 mb-6">
+<div class="w-10 h-10 rounded-[10px] bg-tertiary-container/10 flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined">analytics</span>
+</div>
+<div>
+<h3 class="text-sm font-bold text-on-surface">Execution Summary</h3>
+<p class="text-[10px] text-on-surface-variant/60 font-bold uppercase tracking-wider">Past 24 Hours</p>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-2">
+<div>
+<p class="text-[10px] text-on-surface-variant/60 font-bold uppercase mb-1">Success</p>
+<p class="text-lg font-bold text-tertiary">98.2%</p>
+</div>
+<div>
+<p class="text-[10px] text-on-surface-variant/60 font-bold uppercase mb-1">Avg Lat</p>
+<p class="text-lg font-bold text-[#006B5F]">42ms</p>
+</div>
+<div>
+<p class="text-[10px] text-on-surface-variant/60 font-bold uppercase mb-1">Total</p>
+<p class="text-lg font-bold text-on-surface">1.24M</p>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-low p-6 rounded-[10px]">
+<div class="flex items-center gap-3 mb-6">
+<div class="w-10 h-10 rounded-[10px] bg-secondary-container/30 flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined">schema</span>
+</div>
+<div>
+<h3 class="text-sm font-bold text-on-surface">Schema &amp; Infrastructure</h3>
+<p class="text-[10px] text-on-surface-variant/60 font-bold uppercase tracking-wider">Health: Operational</p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-2">
+<div>
+<p class="text-[10px] text-on-surface-variant/60 font-bold uppercase mb-1">Last Schema</p>
+<p class="text-xs font-bold text-on-surface">Oct 12, 2023</p>
+</div>
+<div>
+<p class="text-[10px] text-on-surface-variant/60 font-bold uppercase mb-1">Region</p>
+<p class="text-xs font-bold text-on-surface">AWS us-east-1</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Activity Log Table -->
+<section class="bg-surface-container-low rounded-[10px] overflow-hidden">
+<div class="p-6 border-b border-surface-container-high/50 flex justify-between items-center">
+<h2 class="text-lg font-bold text-on-surface">Recent Activity Log</h2>
+<button class="text-[10px] font-bold text-[#1F6FEB] hover:underline uppercase tracking-wider">View Full Logs</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-high/30">
+<tr>
+<th class="px-6 py-3 text-[10px] font-bold uppercase tracking-wider text-on-surface-variant/60">Timestamp</th>
+<th class="px-6 py-3 text-[10px] font-bold uppercase tracking-wider text-on-surface-variant/60">Method</th>
+<th class="px-6 py-3 text-[10px] font-bold uppercase tracking-wider text-on-surface-variant/60">Status</th>
+<th class="px-6 py-3 text-[10px] font-bold uppercase tracking-wider text-on-surface-variant/60">Latency</th>
+<th class="px-6 py-3 text-[10px] font-bold uppercase tracking-wider text-on-surface-variant/60">Request ID</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-high/20">
+<tr class="hover:bg-surface-container-high transition-colors group cursor-pointer">
+<td class="px-6 py-4 text-xs font-medium text-on-surface">12:04:22.11</td>
+<td class="px-6 py-4">
+<span class="px-2 py-0.5 rounded-full bg-tertiary-container/20 text-tertiary text-[10px] font-extrabold">GET</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-1.5">
+<div class="w-1.5 h-1.5 rounded-full bg-tertiary"></div>
+<span class="text-xs font-bold text-on-surface">200 OK</span>
+</div>
+</td>
+<td class="px-6 py-4 text-xs text-on-surface-variant">38ms</td>
+<td class="px-6 py-4 text-xs font-mono text-outline/60">req_7f92bc44</td>
+</tr>
+<tr class="hover:bg-surface-container-high transition-colors group cursor-pointer">
+<td class="px-6 py-4 text-xs font-medium text-on-surface">12:04:21.98</td>
+<td class="px-6 py-4">
+<span class="px-2 py-0.5 rounded-full bg-tertiary-container/20 text-tertiary text-[10px] font-extrabold">GET</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-1.5">
+<div class="w-1.5 h-1.5 rounded-full bg-tertiary"></div>
+<span class="text-xs font-bold text-on-surface">200 OK</span>
+</div>
+</td>
+<td class="px-6 py-4 text-xs text-on-surface-variant">45ms</td>
+<td class="px-6 py-4 text-xs font-mono text-outline/60">req_3a21ff89</td>
+</tr>
+<tr class="hover:bg-surface-container-high transition-colors group cursor-pointer">
+<td class="px-6 py-4 text-xs font-medium text-on-surface">12:04:21.02</td>
+<td class="px-6 py-4">
+<span class="px-2 py-0.5 rounded-full bg-tertiary-container/20 text-tertiary text-[10px] font-extrabold">GET</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-1.5">
+<div class="w-1.5 h-1.5 rounded-full bg-tertiary"></div>
+<span class="text-xs font-bold text-on-surface">200 OK</span>
+</div>
+</td>
+<td class="px-6 py-4 text-xs text-on-surface-variant">41ms</td>
+<td class="px-6 py-4 text-xs font-mono text-outline/60">req_a882cd11</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</div>
+</div>
+</div>
+</main>
+</body></html>

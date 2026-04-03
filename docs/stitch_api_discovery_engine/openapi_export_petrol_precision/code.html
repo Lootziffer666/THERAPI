@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>OpenAPI Export - Precision Architect</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container": "#eceef0",
+                    "surface-variant": "#e0e3e5",
+                    "tertiary": "#2a4e3f",
+                    "outline-variant": "#bec9c5",
+                    "primary-fixed-dim": "#83d5c6",
+                    "surface-dim": "#d8dadc",
+                    "on-tertiary": "#ffffff",
+                    "on-background": "#191c1e",
+                    "inverse-primary": "#83d5c6",
+                    "on-error-container": "#93000a",
+                    "secondary-fixed-dim": "#5ddac9",
+                    "primary": "#005147",
+                    "tertiary-fixed-dim": "#a8cfbc",
+                    "on-secondary-fixed-variant": "#005048",
+                    "tertiary-container": "#416656",
+                    "primary-fixed": "#9ff2e2",
+                    "on-error": "#ffffff",
+                    "on-tertiary-fixed-variant": "#294e3f",
+                    "on-secondary-container": "#007166",
+                    "error-container": "#ffdad6",
+                    "on-primary-fixed-variant": "#005047",
+                    "on-primary": "#ffffff",
+                    "inverse-surface": "#2d3133",
+                    "on-tertiary-container": "#bae2ce",
+                    "surface-tint": "#006b5f",
+                    "surface-container-highest": "#e0e3e5",
+                    "surface": "#f7f9fb",
+                    "secondary": "#006a60",
+                    "inverse-on-surface": "#eff1f3",
+                    "tertiary-fixed": "#c3ecd7",
+                    "surface-container-low": "#f2f4f6",
+                    "outline": "#6e7976",
+                    "on-secondary": "#ffffff",
+                    "secondary-container": "#7cf7e5",
+                    "background": "#f7f9fb",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-bright": "#f7f9fb",
+                    "secondary-fixed": "#7cf7e5",
+                    "on-primary-fixed": "#00201c",
+                    "on-primary-container": "#95e8d9",
+                    "on-surface-variant": "#3e4946",
+                    "on-surface": "#191c1e",
+                    "error": "#ba1a1a",
+                    "surface-container-high": "#e6e8ea",
+                    "on-tertiary-fixed": "#002115",
+                    "primary-container": "#006b5f",
+                    "on-secondary-fixed": "#00201c"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Inter"],
+                    "body": ["Inter"],
+                    "label": ["Inter"],
+                    "mono": ["JetBrains Mono"]
+            }
+          },
+        }
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            font-size: 20px;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-background text-on-surface">
+<!-- SideNavBar Shell -->
+<aside class="fixed left-0 top-0 bottom-0 flex flex-col w-[240px] h-screen border-r border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 z-20">
+<div class="px-6 py-8">
+<h1 class="text-lg font-semibold tracking-tighter text-[#005147] dark:text-[#7CF7E5]">Precision Architect</h1>
+<p class="font-['Inter'] text-xs font-semibold uppercase tracking-widest text-slate-500 mt-1">Editorial Tooling</p>
+</div>
+<nav class="flex-1 px-2 space-y-1">
+<!-- Inactive -->
+<a class="flex items-center gap-3 px-4 py-2 text-slate-600 dark:text-slate-400 font-['Inter'] text-sm tracking-tight font-medium hover:bg-slate-200/30 dark:hover:bg-slate-800 transition-colors active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                Control Panel
+            </a>
+<a class="flex items-center gap-3 px-4 py-2 text-slate-600 dark:text-slate-400 font-['Inter'] text-sm tracking-tight font-medium hover:bg-slate-200/30 dark:hover:bg-slate-800 transition-colors active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined" data-icon="explore">explore</span>
+                Endpoint Explorer
+            </a>
+<a class="flex items-center gap-3 px-4 py-2 text-slate-600 dark:text-slate-400 font-['Inter'] text-sm tracking-tight font-medium hover:bg-slate-200/30 dark:hover:bg-slate-800 transition-colors active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined" data-icon="compare_arrows">compare_arrows</span>
+                Schema Drift
+            </a>
+<a class="flex items-center gap-3 px-4 py-2 text-slate-600 dark:text-slate-400 font-['Inter'] text-sm tracking-tight font-medium hover:bg-slate-200/30 dark:hover:bg-slate-800 transition-colors active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined" data-icon="pcap">capture</span>
+                Capture Inspector
+            </a>
+<!-- Active: OpenAPI Export -->
+<a class="flex items-center gap-3 px-4 py-2 text-[#005147] dark:text-[#7CF7E5] border-l-4 border-[#005147] bg-slate-200/50 dark:bg-[#005147]/20 font-['Inter'] text-sm tracking-tight font-medium active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined" data-icon="api">api</span>
+                OpenAPI Export
+            </a>
+<a class="flex items-center gap-3 px-4 py-2 text-slate-600 dark:text-slate-400 font-['Inter'] text-sm tracking-tight font-medium hover:bg-slate-200/30 dark:hover:bg-slate-800 transition-colors active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+                Collections Export
+            </a>
+<a class="flex items-center gap-3 px-4 py-2 text-slate-600 dark:text-slate-400 font-['Inter'] text-sm tracking-tight font-medium hover:bg-slate-200/30 dark:hover:bg-slate-800 transition-colors active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+                Settings
+            </a>
+</nav>
+<div class="p-6 border-t border-slate-200/60">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-sm" data-icon="shield_person">shield_person</span>
+</div>
+<div>
+<p class="text-xs font-bold text-on-surface">Admin_Root</p>
+<p class="text-[10px] text-slate-500 uppercase tracking-tighter">System Access</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- TopAppBar Shell -->
+<header class="fixed top-0 right-0 flex items-center justify-between px-6 z-10 h-[56px] w-[calc(100%-240px)] ml-[240px] bg-white/80 dark:bg-slate-950/80 backdrop-blur-xl border-b border-slate-200/60 dark:border-slate-800/60 shadow-sm shadow-[#005147]/05">
+<div class="flex items-center gap-4">
+<span class="text-xs font-semibold uppercase tracking-widest text-[#005147]">therAPI Editor</span>
+<span class="w-[1px] h-4 bg-slate-200"></span>
+<span class="text-[10px] font-bold text-secondary flex items-center gap-1.5 px-2 py-0.5 bg-secondary-container rounded-full">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                Proxy: Active
+            </span>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2">
+<span class="text-[10px] font-semibold text-slate-500 uppercase tracking-widest">Capture: 100%</span>
+<div class="w-24 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+<div class="w-full h-full bg-primary"></div>
+</div>
+</div>
+<span class="material-symbols-outlined text-slate-500 cursor-pointer hover:text-[#006B5F]" data-icon="settings_input_component">settings_input_component</span>
+</div>
+</header>
+<!-- Main Content -->
+<main class="ml-[240px] pt-[56px] min-h-screen bg-background">
+<div class="p-8 max-w-7xl mx-auto space-y-8">
+<!-- Page Header -->
+<header class="flex flex-col gap-1">
+<h2 class="text-3xl font-semibold tracking-tight text-on-surface -ml-0.5">OpenAPI Export</h2>
+<p class="text-sm text-on-surface-variant">Review, format, and package your discovered endpoint schemas for documentation sync.</p>
+</header>
+<!-- Main Editor Section -->
+<section class="grid grid-cols-1 gap-6">
+<div class="bg-surface-container-lowest rounded-[10px] shadow-[0px_4px_20px_rgba(0,81,71,0.05)] overflow-hidden flex flex-col h-[600px]">
+<!-- Toolbar -->
+<div class="bg-surface-container-low border-b border-outline-variant/20 px-4 py-3 flex items-center justify-between">
+<div class="flex items-center gap-1">
+<button class="flex items-center gap-2 px-3 py-1.5 text-xs font-semibold text-on-surface-variant hover:bg-white rounded-[6px] transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="format_align_left">format_align_left</span>
+                                Format JSON
+                            </button>
+<button class="flex items-center gap-2 px-3 py-1.5 text-xs font-semibold text-on-surface-variant hover:bg-white rounded-[6px] transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="fact_check">fact_check</span>
+                                Validate
+                            </button>
+<span class="w-[1px] h-4 bg-outline-variant/30 mx-1"></span>
+<button class="flex items-center gap-2 px-3 py-1.5 text-xs font-semibold text-on-surface-variant hover:bg-white rounded-[6px] transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="content_copy">content_copy</span>
+                                Copy
+                            </button>
+</div>
+<div class="flex items-center gap-3">
+<button class="flex items-center gap-2 px-4 py-2 bg-surface-container-high text-on-surface text-xs font-bold rounded-[10px] hover:bg-slate-200 transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="download">download</span>
+                                Download YAML
+                            </button>
+<button class="flex items-center gap-2 px-4 py-2 bg-primary text-white text-xs font-bold rounded-[10px] hover:bg-primary-container transition-all shadow-sm">
+<span class="material-symbols-outlined text-sm" data-icon="file_download">file_download</span>
+                                Download JSON
+                            </button>
+</div>
+</div>
+<!-- Code Preview Panel -->
+<div class="flex-1 relative bg-[#1E1E1E] text-slate-300 font-mono text-[13px] leading-relaxed overflow-auto p-6 no-scrollbar">
+<div class="flex gap-6">
+<div class="text-slate-600 text-right select-none opacity-50">
+                                01<br/>02<br/>03<br/>04<br/>05<br/>06<br/>07<br/>08<br/>09<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20<br/>21<br/>22<br/>23
+                            </div>
+<div>
+<span class="text-purple-400">{</span><br/>
+                                  <span class="text-teal-300">"openapi"</span>: <span class="text-orange-300">"3.0.0"</span>,<br/>
+                                  <span class="text-teal-300">"info"</span>: <span class="text-purple-400">{</span><br/>
+                                    <span class="text-teal-300">"title"</span>: <span class="text-orange-300">"Precision Architect Core API"</span>,<br/>
+                                    <span class="text-teal-300">"version"</span>: <span class="text-orange-300">"2.1.0-discovery"</span><br/>
+                                  <span class="text-purple-400">}</span>,<br/>
+                                  <span class="text-teal-300">"paths"</span>: <span class="text-purple-400">{</span><br/>
+                                    <span class="text-teal-300">"/v1/capture/sessions"</span>: <span class="text-purple-400">{</span><br/>
+                                      <span class="text-teal-300">"get"</span>: <span class="text-purple-400">{</span><br/>
+                                        <span class="text-teal-300">"summary"</span>: <span class="text-orange-300">"List all capture sessions"</span>,<br/>
+                                        <span class="text-teal-300">"responses"</span>: <span class="text-purple-400">{</span><br/>
+                                          <span class="text-teal-300">"200"</span>: <span class="text-purple-400">{</span><br/>
+                                            <span class="text-teal-300">"description"</span>: <span class="text-orange-300">"Successful operation"</span><br/>
+                                          <span class="text-purple-400">}</span><br/>
+                                        <span class="text-purple-400">}</span><br/>
+                                      <span class="text-purple-400">}</span><br/>
+                                    <span class="text-purple-400">}</span><br/>
+                                  <span class="text-purple-400">}</span><br/>
+<span class="text-purple-400">}</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Export History Table -->
+<div class="space-y-4">
+<div class="flex items-center justify-between">
+<h3 class="text-lg font-semibold tracking-tight text-on-surface">Export History</h3>
+<span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Last 30 Days</span>
+</div>
+<div class="bg-surface-container-lowest rounded-[10px] shadow-[0px_4px_20px_rgba(0,81,71,0.05)] overflow-hidden">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low border-b border-outline-variant/10">
+<tr>
+<th class="px-6 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Timestamp</th>
+<th class="px-6 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Format</th>
+<th class="px-6 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest text-right">Size</th>
+<th class="px-6 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest text-right">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/10">
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="text-sm font-medium text-on-surface">Oct 24, 2023 · 14:22:01</span>
+<span class="text-[10px] text-slate-500 uppercase tracking-tighter">Full schema sync</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 bg-secondary-container text-on-secondary-container text-[10px] font-bold rounded-md">JSON</span>
+</td>
+<td class="px-6 py-4 text-right">
+<span class="text-sm font-mono text-on-surface-variant">1.4 MB</span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-primary hover:text-primary-container">
+<span class="material-symbols-outlined" data-icon="cloud_download">cloud_download</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="text-sm font-medium text-on-surface">Oct 24, 2023 · 09:15:44</span>
+<span class="text-[10px] text-slate-500 uppercase tracking-tighter">Partial diff update</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 bg-surface-container-high text-on-surface text-[10px] font-bold rounded-md">YAML</span>
+</td>
+<td class="px-6 py-4 text-right">
+<span class="text-sm font-mono text-on-surface-variant">842 KB</span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-primary hover:text-primary-container">
+<span class="material-symbols-outlined" data-icon="cloud_download">cloud_download</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="text-sm font-medium text-on-surface">Oct 23, 2023 · 18:04:12</span>
+<span class="text-[10px] text-slate-500 uppercase tracking-tighter">Initial baseline</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 bg-secondary-container text-on-secondary-container text-[10px] font-bold rounded-md">JSON</span>
+</td>
+<td class="px-6 py-4 text-right">
+<span class="text-sm font-mono text-on-surface-variant">1.2 MB</span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-primary hover:text-primary-container">
+<span class="material-symbols-outlined" data-icon="cloud_download">cloud_download</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<!-- Bottom Stats Grid -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-6 pb-8">
+<div class="bg-white p-6 rounded-[10px] border-l-4 border-primary shadow-sm flex flex-col justify-between h-32">
+<span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Total Endpoints Exported</span>
+<div class="flex items-baseline gap-2">
+<span class="text-3xl font-bold text-[#005147]">142</span>
+<span class="text-xs text-secondary-container bg-primary-container px-1.5 py-0.5 rounded">+12</span>
+</div>
+</div>
+<div class="bg-white p-6 rounded-[10px] border-l-4 border-secondary-container shadow-sm flex flex-col justify-between h-32">
+<span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Schema Accuracy Rate</span>
+<div class="flex items-baseline gap-2">
+<span class="text-3xl font-bold text-secondary">99.4%</span>
+<span class="text-xs text-slate-400">Optimized</span>
+</div>
+</div>
+<div class="bg-white p-6 rounded-[10px] border-l-4 border-tertiary-container shadow-sm flex flex-col justify-between h-32">
+<span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Active Data Collections</span>
+<div class="flex items-baseline gap-2">
+<span class="text-3xl font-bold text-tertiary">24</span>
+<span class="text-xs text-slate-400">Ready</span>
+</div>
+</div>
+</section>
+</div>
+</main>
+</body></html>

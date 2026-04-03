@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Collections Export | Precision Architect</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container": "#eceef0",
+                        "surface-variant": "#e0e3e5",
+                        "tertiary": "#2a4e3f",
+                        "outline-variant": "#bec9c5",
+                        "primary-fixed-dim": "#83d5c6",
+                        "surface-dim": "#d8dadc",
+                        "on-tertiary": "#ffffff",
+                        "on-background": "#191c1e",
+                        "inverse-primary": "#83d5c6",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed-dim": "#5ddac9",
+                        "primary": "#005147",
+                        "tertiary-fixed-dim": "#a8cfbc",
+                        "on-secondary-fixed-variant": "#005048",
+                        "tertiary-container": "#416656",
+                        "primary-fixed": "#9ff2e2",
+                        "on-error": "#ffffff",
+                        "on-tertiary-fixed-variant": "#294e3f",
+                        "on-secondary-container": "#007166",
+                        "error-container": "#ffdad6",
+                        "on-primary-fixed-variant": "#005047",
+                        "on-primary": "#ffffff",
+                        "inverse-surface": "#2d3133",
+                        "on-tertiary-container": "#bae2ce",
+                        "surface-tint": "#006b5f",
+                        "surface-container-highest": "#e0e3e5",
+                        "surface": "#f7f9fb",
+                        "secondary": "#006a60",
+                        "inverse-on-surface": "#eff1f3",
+                        "tertiary-fixed": "#c3ecd7",
+                        "surface-container-low": "#f2f4f6",
+                        "outline": "#6e7976",
+                        "on-secondary": "#ffffff",
+                        "secondary-container": "#7cf7e5",
+                        "background": "#f7f9fb",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-bright": "#f7f9fb",
+                        "secondary-fixed": "#7cf7e5",
+                        "on-primary-fixed": "#00201c",
+                        "on-primary-container": "#95e8d9",
+                        "on-surface-variant": "#3e4946",
+                        "on-surface": "#191c1e",
+                        "error": "#ba1a1a",
+                        "surface-container-high": "#e6e8ea",
+                        "on-tertiary-fixed": "#002115",
+                        "primary-container": "#006b5f",
+                        "on-secondary-fixed": "#00201c"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "10px",
+                        "xl": "12px",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #F7F9FB; color: #191C1E; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .tonal-depth { background-color: #f2f4f6; }
+        .glass-panel { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(20px); }
+    </style>
+</head>
+<body class="bg-surface overflow-hidden">
+<!-- SideNavBar Shell -->
+<nav class="fixed left-0 top-0 bottom-0 flex flex-col w-[240px] bg-slate-50 border-r border-slate-200 z-20">
+<div class="px-6 py-8">
+<h1 class="text-lg font-semibold tracking-tighter text-[#005147]">Precision Architect</h1>
+<p class="font-['Inter'] text-[10px] uppercase tracking-widest text-slate-500 font-semibold mt-1">Editorial Tooling</p>
+</div>
+<div class="flex-1 space-y-1 px-2">
+<a class="flex items-center gap-3 px-4 py-2 text-slate-600 hover:bg-slate-200/30 transition-colors font-medium text-sm" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                Control Panel
+            </a>
+<a class="flex items-center gap-3 px-4 py-2 text-slate-600 hover:bg-slate-200/30 transition-colors font-medium text-sm" href="#">
+<span class="material-symbols-outlined" data-icon="explore">explore</span>
+                Endpoint Explorer
+            </a>
+<a class="flex items-center gap-3 px-4 py-2 text-slate-600 hover:bg-slate-200/30 transition-colors font-medium text-sm" href="#">
+<span class="material-symbols-outlined" data-icon="compare_arrows">compare_arrows</span>
+                Schema Drift
+            </a>
+<a class="flex items-center gap-3 px-4 py-2 text-slate-600 hover:bg-slate-200/30 transition-colors font-medium text-sm" href="#">
+<span class="material-symbols-outlined" data-icon="pcap">capture</span>
+                Capture Inspector
+            </a>
+<a class="flex items-center gap-3 px-4 py-2 text-slate-600 hover:bg-slate-200/30 transition-colors font-medium text-sm" href="#">
+<span class="material-symbols-outlined" data-icon="api">api</span>
+                OpenAPI Export
+            </a>
+<a class="flex items-center gap-3 px-4 py-2 text-[#005147] border-l-4 border-[#005147] bg-slate-200/50 font-medium text-sm" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+                Collections Export
+            </a>
+<a class="flex items-center gap-3 px-4 py-2 text-slate-600 hover:bg-slate-200/30 transition-colors font-medium text-sm" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+                Settings
+            </a>
+</div>
+</nav>
+<!-- TopAppBar Shell -->
+<header class="fixed top-0 right-0 h-[56px] w-[calc(100%-240px)] flex items-center justify-between px-8 bg-white/80 backdrop-blur-xl border-b border-slate-200/60 z-10">
+<div class="flex items-center gap-4">
+<span class="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">Environment</span>
+<span class="px-2 py-0.5 rounded bg-secondary-container text-on-secondary-container text-[10px] font-bold tracking-wider">PROD-CLUSTER-04</span>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2">
+<span class="text-[10px] font-semibold uppercase tracking-widest text-slate-500">Proxy:</span>
+<span class="text-[10px] font-bold text-primary">Active</span>
+</div>
+<div class="flex items-center gap-2 border-l border-slate-200 pl-6">
+<span class="text-[10px] font-semibold uppercase tracking-widest text-slate-500">Capture:</span>
+<span class="text-[10px] font-bold text-primary">100%</span>
+</div>
+<button class="material-symbols-outlined text-slate-400 hover:text-primary transition-colors cursor-pointer" data-icon="settings_input_component">settings_input_component</button>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="ml-[240px] pt-[56px] h-screen flex bg-surface">
+<!-- Left Column: Collection List -->
+<section class="w-[450px] flex flex-col border-r border-outline-variant/20 bg-surface-container-low">
+<div class="p-6 border-b border-outline-variant/10">
+<div class="flex items-center justify-between mb-4">
+<h2 class="text-xl font-semibold tracking-tight text-on-surface">Available Collections</h2>
+<span class="px-2 py-1 bg-surface-container-highest text-on-surface-variant text-[10px] font-bold rounded">12 TOTAL</span>
+</div>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container-lowest border-none rounded-lg text-sm focus:ring-1 focus:ring-primary/20 placeholder:text-slate-400" placeholder="Filter collections..." type="text"/>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto px-4 py-6 space-y-4">
+<!-- Collection Item 1 (Active) -->
+<div class="p-4 bg-surface-container-lowest rounded-lg border-l-4 border-primary shadow-[0px_4px_20px_rgba(0,81,71,0.05)] cursor-pointer">
+<div class="flex justify-between items-start mb-2">
+<span class="text-[10px] font-bold uppercase tracking-wider text-primary px-2 py-0.5 bg-primary/10 rounded">Postman_v2.1</span>
+<span class="text-[10px] font-medium text-slate-400">2 mins ago</span>
+</div>
+<h3 class="font-semibold text-sm mb-1 text-on-surface">Auth Service Internal</h3>
+<p class="text-xs text-slate-500 mb-3 font-medium">8 Endpoints • 2.4k Captures</p>
+<div class="flex gap-2">
+<div class="h-1.5 flex-1 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary w-3/4"></div>
+</div>
+</div>
+</div>
+<!-- Collection Item 2 -->
+<div class="p-4 bg-surface-container-lowest rounded-lg border border-transparent hover:border-slate-200 transition-all cursor-pointer">
+<div class="flex justify-between items-start mb-2">
+<span class="text-[10px] font-bold uppercase tracking-wider text-slate-500 px-2 py-0.5 bg-slate-100 rounded">Insomnia_v3</span>
+<span class="text-[10px] font-medium text-slate-400">1 hour ago</span>
+</div>
+<h3 class="font-semibold text-sm mb-1 text-on-surface">Payment Gateway Alpha</h3>
+<p class="text-xs text-slate-500 mb-3 font-medium">14 Endpoints • 12k Captures</p>
+<div class="flex gap-2">
+<div class="h-1.5 flex-1 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-slate-300 w-1/2"></div>
+</div>
+</div>
+</div>
+<!-- Collection Item 3 -->
+<div class="p-4 bg-surface-container-lowest rounded-lg border border-transparent hover:border-slate-200 transition-all cursor-pointer">
+<div class="flex justify-between items-start mb-2">
+<span class="text-[10px] font-bold uppercase tracking-wider text-slate-500 px-2 py-0.5 bg-slate-100 rounded">Raw_JSON</span>
+<span class="text-[10px] font-medium text-slate-400">4 hours ago</span>
+</div>
+<h3 class="font-semibold text-sm mb-1 text-on-surface">Inventory Management</h3>
+<p class="text-xs text-slate-500 mb-3 font-medium">4 Endpoints • 890 Captures</p>
+<div class="flex gap-2">
+<div class="h-1.5 flex-1 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-slate-300 w-1/5"></div>
+</div>
+</div>
+</div>
+<!-- Collection Item 4 -->
+<div class="p-4 bg-surface-container-lowest rounded-lg border border-transparent hover:border-slate-200 transition-all cursor-pointer">
+<div class="flex justify-between items-start mb-2">
+<span class="text-[10px] font-bold uppercase tracking-wider text-primary px-2 py-0.5 bg-primary/10 rounded">Postman_v2.1</span>
+<span class="text-[10px] font-medium text-slate-400">Yesterday</span>
+</div>
+<h3 class="font-semibold text-sm mb-1 text-on-surface">User Profile V2</h3>
+<p class="text-xs text-slate-500 mb-3 font-medium">2 Endpoints • 5.1k Captures</p>
+<div class="flex gap-2">
+<div class="h-1.5 flex-1 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary w-full"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Right Column: Collection Detail -->
+<section class="flex-1 bg-surface-bright p-8 overflow-y-auto">
+<div class="max-w-4xl mx-auto">
+<!-- Header Actions -->
+<div class="flex items-center justify-between mb-8">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-primary text-lg" data-icon="inventory_2">inventory_2</span>
+<h2 class="text-2xl font-bold tracking-tight">Auth Service Internal</h2>
+</div>
+<p class="text-slate-500 text-sm">Collection ID: <span class="font-mono text-xs">col_8832_auth_prod</span></p>
+</div>
+<div class="flex items-center gap-3">
+<button class="flex items-center gap-2 px-4 py-2 bg-surface-container-high text-on-surface font-semibold text-xs rounded-lg hover:bg-surface-container-highest transition-colors uppercase tracking-widest">
+<span class="material-symbols-outlined text-sm" data-icon="open_in_new">open_in_new</span>
+                            Open
+                        </button>
+<button class="flex items-center gap-2 px-4 py-2 bg-surface-container-high text-on-surface font-semibold text-xs rounded-lg hover:bg-surface-container-highest transition-colors uppercase tracking-widest">
+<span class="material-symbols-outlined text-sm" data-icon="content_copy">content_copy</span>
+                            Copy
+                        </button>
+<button class="flex items-center gap-2 px-6 py-2 bg-primary text-white font-semibold text-xs rounded-lg hover:bg-primary-container transition-all shadow-md shadow-primary/10 uppercase tracking-widest">
+<span class="material-symbols-outlined text-sm" data-icon="download">download</span>
+                            Download
+                        </button>
+</div>
+</div>
+<!-- Details Grid (Bento Style) -->
+<div class="grid grid-cols-12 gap-6">
+<!-- Meta Stats -->
+<div class="col-span-12 grid grid-cols-4 gap-4">
+<div class="bg-surface-container-lowest p-4 rounded-lg shadow-[0px_4px_20px_rgba(0,81,71,0.05)] border border-outline-variant/10">
+<p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Endpoints</p>
+<p class="text-2xl font-bold text-primary">08</p>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-lg shadow-[0px_4px_20px_rgba(0,81,71,0.05)] border border-outline-variant/10">
+<p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Samples</p>
+<p class="text-2xl font-bold text-primary">156</p>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-lg shadow-[0px_4px_20px_rgba(0,81,71,0.05)] border border-outline-variant/10">
+<p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Captures</p>
+<p class="text-2xl font-bold text-primary">2.4k</p>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-lg shadow-[0px_4px_20px_rgba(0,81,71,0.05)] border border-outline-variant/10">
+<p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Schema Drift</p>
+<p class="text-2xl font-bold text-error">02</p>
+</div>
+</div>
+<!-- Code Preview Section -->
+<div class="col-span-8 bg-surface-container-lowest p-6 rounded-lg border border-outline-variant/10 shadow-[0px_4px_20px_rgba(0,81,71,0.05)]">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-sm font-bold uppercase tracking-widest text-slate-500">Capture Fragment: <span class="text-primary">POST /v1/auth/login</span></h3>
+<span class="text-[10px] font-mono text-slate-400">application/json</span>
+</div>
+<div class="bg-[#1e293b] p-6 rounded-lg font-mono text-sm leading-relaxed text-slate-300 overflow-x-auto">
+<div class="flex gap-4">
+<span class="text-slate-600 select-none">01</span>
+<span>{</span>
+</div>
+<div class="flex gap-4">
+<span class="text-slate-600 select-none">02</span>
+<span class="pl-4">"request": {</span>
+</div>
+<div class="flex gap-4">
+<span class="text-slate-600 select-none">03</span>
+<span class="pl-8">"method": <span class="text-secondary-fixed">"POST"</span>,</span>
+</div>
+<div class="flex gap-4">
+<span class="text-slate-600 select-none">04</span>
+<span class="pl-8">"header": [ { <span class="text-primary-fixed-dim">"key"</span>: <span class="text-secondary-fixed">"Content-Type"</span>, <span class="text-primary-fixed-dim">"value"</span>: <span class="text-secondary-fixed">"application/json"</span> } ],</span>
+</div>
+<div class="flex gap-4">
+<span class="text-slate-600 select-none">05</span>
+<span class="pl-8">"body": { <span class="text-primary-fixed-dim">"raw"</span>: <span class="text-secondary-fixed">"{\"email\":\"user@dev.com\",\"pass\":\"****\"}"</span> }</span>
+</div>
+<div class="flex gap-4">
+<span class="text-slate-600 select-none">06</span>
+<span class="pl-4">},</span>
+</div>
+<div class="flex gap-4">
+<span class="text-slate-600 select-none">07</span>
+<span class="pl-4">"response": {</span>
+</div>
+<div class="flex gap-4">
+<span class="text-slate-600 select-none">08</span>
+<span class="pl-8">"status": <span class="text-secondary-fixed">"200 OK"</span>,</span>
+</div>
+<div class="flex gap-4">
+<span class="text-slate-600 select-none">09</span>
+<span class="pl-8">"body": { <span class="text-primary-fixed-dim">"token"</span>: <span class="text-secondary-fixed">"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."</span> }</span>
+</div>
+<div class="flex gap-4">
+<span class="text-slate-600 select-none">10</span>
+<span class="pl-4">}</span>
+</div>
+<div class="flex gap-4">
+<span class="text-slate-600 select-none">11</span>
+<span>}</span>
+</div>
+</div>
+</div>
+<!-- Export Configuration Panel -->
+<div class="col-span-4 flex flex-col gap-6">
+<div class="bg-surface-container-lowest p-6 rounded-lg border border-outline-variant/10 shadow-[0px_4px_20px_rgba(0,81,71,0.05)]">
+<h3 class="text-sm font-bold uppercase tracking-widest text-slate-500 mb-4">Export Config</h3>
+<div class="space-y-4">
+<div>
+<label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Target Format</label>
+<select class="w-full bg-surface-container-low border-none rounded-lg text-sm font-medium py-2 focus:ring-1 focus:ring-primary/20">
+<option>Postman Collection v2.1</option>
+<option>OpenAPI v3.0 (YAML)</option>
+<option>Insomnia JSON</option>
+</select>
+</div>
+<div>
+<label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Capture Depth</label>
+<div class="flex items-center gap-2 mt-2">
+<input class="flex-1 accent-primary h-1 bg-surface-container rounded-lg appearance-none cursor-pointer" type="range"/>
+<span class="text-xs font-bold text-primary w-8">ALL</span>
+</div>
+</div>
+<div class="pt-2">
+<label class="flex items-center gap-3 cursor-pointer">
+<div class="relative inline-flex items-center">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-9 h-5 bg-surface-container-high rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+</div>
+<span class="text-xs font-medium text-on-surface">Sanitize Auth Tokens</span>
+</label>
+</div>
+</div>
+</div>
+<!-- Image Preview (Asset) -->
+<div class="flex-1 rounded-lg overflow-hidden relative group">
+<img class="w-full h-full object-cover" data-alt="Abstract architectural rendering of sleek interlocking white blocks with mint green glow under cold studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCrFXCoH1eZ93KYq_pYtZRjI9B6vqE11d5LhNxUH55j-Pq9IKeEtRorRzVR95eDGH9X7epEKAnxsWIC1dGqG8ha08V3PIijSiYGBTvzHNDwM6H3PxqSCEFMI-z2R3K8viKWScIcc_6IQSVOXZFCmyUCDmz-49NJJ9ydI15_PQhL5EKczU4hXsvJgUtV3ehkcevuhZ2PCUoBBXKbIhz2nAy8Lzkp_2OKgojXnjpmFz2sD-FiBlt9-Bi3wPv1U0Zp8cB5-XzH_uoGxVw"/>
+<div class="absolute inset-0 bg-primary/20 mix-blend-multiply group-hover:bg-primary/10 transition-colors"></div>
+<div class="absolute bottom-4 left-4">
+<span class="text-[10px] font-bold text-white uppercase tracking-[0.3em]">Validation Ready</span>
+</div>
+</div>
+</div>
+<!-- Footnote / Log -->
+<div class="col-span-12 bg-surface-container-low p-4 rounded-lg flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-sm" data-icon="history">history</span>
+<span class="text-xs text-slate-500 font-medium">Last export generated on Oct 24, 2023 by system_admin</span>
+</div>
+<a class="text-primary text-xs font-bold uppercase tracking-widest hover:underline" href="#">View Audit Log</a>
+</div>
+</div>
+</div>
+</section>
+</main>
+</body></html>
