@@ -10,6 +10,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from typing import Any
 
 from .openapi import OpenApiGenerator
+from .redaction import redact_headers, redact_json
 from .registry import SchemaRegistry
 
 
