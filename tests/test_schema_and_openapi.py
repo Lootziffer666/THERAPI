@@ -1,6 +1,7 @@
 import unittest
 
 from therapi.openapi import OpenApiGenerator
+from therapi.redaction import REDACTED, redact_headers, redact_json
 from therapi.registry import SchemaRegistry
 from therapi.schema import SchemaNode
 
@@ -32,6 +33,37 @@ class RegistryAndOpenApiTests(unittest.TestCase):
         get_users = spec["paths"]["/users"]["get"]
         properties = get_users["responses"]["200"]["content"]["application/json"]["schema"]["properties"]
         self.assertIn("active", properties)
+
+    def test_drift_report_contains_changes(self):
+        registry = SchemaRegistry()
+        registry.observe("GET", "/users", None, {"id": 1})
+        registry.observe("GET", "/users", None, {"id": 1, "name": "Jane"})
+
+        drift = registry.drift_report()["GET /users"]
+        self.assertEqual(len(drift), 2)
+        self.assertTrue(any("name:string" in item for item in drift[-1]["response"]["added"]))
+
+    def test_collection_export_stores_redacted_capture(self):
+        registry = SchemaRegistry()
+        registry.observe(
+            "POST",
+            "/login",
+            {"username": "alice", "password": "secret"},
+            {"token": "abc"},
+            capture={
+                "target": "https://example.com/login",
+                "status": 200,
+                "request_headers": redact_headers({"Authorization": "Bearer x", "X-Trace": "1"}),
+                "response_headers": {},
+                "request_json": redact_json({"password": "secret", "username": "alice"}),
+                "response_json": redact_json({"token": "abc"}),
+            },
+        )
+
+        exported = registry.export_collections()["collections"][0]["captures"][0]
+        self.assertEqual(exported["request_headers"]["Authorization"], REDACTED)
+        self.assertEqual(exported["request_json"]["password"], REDACTED)
+        self.assertEqual(exported["response_json"]["token"], REDACTED)
 
 
 if __name__ == "__main__":
