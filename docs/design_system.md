@@ -1,0 +1,372 @@
+# THERAPI Design System (Stitch-ready, v0)
+
+Ziel: **Google Stitch** trotz eingeschränkter Befehlsgenauigkeit zuverlässig nutzen.
+
+Dieses Dokument ist absichtlich in **kleinen, robusten Prompt-Bausteinen** aufgebaut (Atomic Prompts), damit Stitch weniger Interpretationsspielraum hat.
+
+---
+
+## 1) Produktkontext (für jeden Stitch-Startprompt)
+
+> Baue ein Desktop-first Web-Interface für ein lokales API-Discovery-Tool namens **THERAPI**. Fokus: HTTP-Capture, Endpoint-Übersicht, Schema-Versionen, Drift-Diff, OpenAPI-Export. Kein Marketing-Look, sondern Tooling-UI mit hoher Informationsdichte.
+
+---
+
+## 2) Design-Tokens (fix, guideline-konform)
+
+- **Theme-Prinzip:** kein Techy-Startup-Look. Ruhig, klar, produktiv.
+- **Mode-Prinzip:** Light ist Default. Dark ist **exakt derselbe Modus**, nur anders beleuchtet (keine semantische Verschiebung).
+- **Border radius:** 10px
+- **Grid/Spacing:** 8pt-Grid mit 4/8/16/24/32
+- **Font:** Inter (Semibold headings, Regular body)
+- **Semantische Rollen (in Light und Dark identisch):**
+  - primary (Action/Fokus) `#1F6FEB`
+  - secondary (stützende Signale) `#5B7C99`
+  - accent (sparsame Hervorhebung) `#14B8A6`
+  - success `#22C55E`
+  - warning `#F59E0B`
+  - danger `#EF4444`
+  - info `#38BDF8`
+- **Light-Token (Default):**
+  - background `#F8FAFC`
+  - surface `#FFFFFF`
+  - elevated-surface `#F1F5F9`
+  - border `#CBD5E1`
+  - text-primary `#0F172A`
+  - text-secondary `#475569`
+- **Dark-Token (nur Beleuchtung):**
+  - background `#0F172A`
+  - surface `#111827`
+  - elevated-surface `#1F2937`
+  - border `#334155`
+  - text-primary `#E5E7EB`
+  - text-secondary `#94A3B8`
+  - Mapping-Regel: Rolle/Hierarchie/Komponentenlogik bleibt 1:1 identisch zu Light.
+- **Kontrastregeln:** mindestens WCAG AA; Status nicht nur über Farbe kommunizieren
+
+---
+
+## 3) Seitenstruktur (MVP)
+
+1. **Control Panel**
+2. **Endpoint Explorer**
+3. **Schema Drift**
+4. **Capture Inspector**
+5. **OpenAPI Export**
+6. **Collections Export**
+7. **Settings**
+
+---
+
+## 4) Atomic Prompts für Stitch (empfohlen)
+
+> Hinweis: Immer **nur 1 Prompt pro Schritt** senden. Erst Layout, dann Komponenten, dann States.
+
+### 4.1 App Shell
+
+**Prompt A1 — Grundlayout**
+
+> Erzeuge eine Desktop-App-Shell mit linker Sidebar (240px), Topbar (56px), Content-Bereich rechts. Nutze helles, neutrales Theme als Default mit den angegebenen Tokens. Sidebar enthält Navigation: Control Panel, Endpoint Explorer, Schema Drift, Capture Inspector, OpenAPI Export, Collections Export, Settings.
+
+**Prompt A2 — Topbar Status**
+
+> Ergänze in der Topbar rechts drei Status-Chips: Proxy Status, Target Base URL, Capture Rate. Statusfarben: grün/gelb/rot je nach Zustand.
+
+---
+
+### 4.2 Control Panel
+
+**Prompt C1 — Kartenlayout**
+
+> Erzeuge im Content-Bereich ein 2-Spalten-Layout. Linke Spalte: Proxy Status Card und Capture Config Form. Rechte Spalte: Quick Actions Bar und Endpoint Overview Table.
+
+**Prompt C2 — Proxy Status Card**
+
+> Baue eine Karte "Proxy Status" mit Feldern: status, host, port, uptime und einem Refresh-Button.
+
+**Prompt C3 — Capture Config Form**
+
+> Baue ein Formular "Capture Config" mit Inputs: host, port, target_base_url, store_path. Buttons: Save Config, Reset Config, Test Target.
+
+**Prompt C4 — Endpoint Table**
+
+> Baue eine Tabelle "Endpoint Overview" mit Spalten: method, path, samples, versions, captures, last_changed. Mit Search, Method-Filter und Sortierung.
+
+---
+
+### 4.3 Endpoint Explorer
+
+**Prompt E1 — Explorer Layout**
+
+> Erzeuge ein 3-Spalten-Layout: links Filterbar, Mitte Endpoint-Liste, rechts Detailbereich mit Tabs.
+
+**Prompt E2 — Detail Tabs**
+
+> Detail-Tabs: Summary, Schema Versions, Captures, OpenAPI. Default: Summary.
+
+---
+
+### 4.4 Schema Drift
+
+**Prompt D1 — Drift Timeline + Diff**
+
+> Erzeuge oben eine Version-Timeline und darunter eine Diff-Tabelle. Diff zeigt Added Paths und Removed Paths getrennt. Ergänze Badges für Breaking Change Risiko.
+
+---
+
+### 4.5 Capture Inspector
+
+**Prompt I1 — Split View**
+
+> Erzeuge eine geteilte Ansicht: links Request Panel, rechts Response Panel. Beide mit Header, JSON-Viewer, Copy-Buttons.
+
+**Prompt I2 — Redaction Notice**
+
+> Ergänze oberhalb des JSON-Viewers einen Hinweis "Sensitive values are redacted" mit Zählern für redacted headers und redacted fields.
+
+---
+
+### 4.6 OpenAPI Export
+
+**Prompt O1 — Preview + Actions**
+
+> Baue OpenAPI Preview als JSON-Panel mit Buttons: Format JSON, Validate, Copy, Download JSON, Download YAML. Darunter Export History Tabelle.
+
+---
+
+### 4.7 Collections Export
+
+**Prompt X1 — Liste + Detail**
+
+> Baue links eine Collection-Liste (endpoint, samples, captures), rechts Collection-Detail mit Captures und Actions: Open, Copy, Download.
+
+---
+
+### 4.8 Settings
+
+**Prompt S1 — Settings Sektionen**
+
+> Erzeuge vier Sektionen: Environment Profiles, Redaction Rules Editor, Retention Limits, Replay Guardrails. Jede Sektion als Card mit Edit/View-State.
+
+---
+
+## 5) Komponenteninventar (kompakt)
+
+### Navigation & Shell
+- App Shell
+- Sidebar Nav
+- Topbar Status
+
+### Control Panel
+- Proxy Status Card
+- Capture Config Form
+- Quick Actions Bar
+- Endpoint Overview Table
+
+### Explorer & Drift
+- Endpoint Filter Bar
+- Endpoint List
+- Endpoint Detail Tabs
+- Version Timeline
+- Drift Timeline
+- Drift Diff Table
+- Breaking Change Badges
+
+### Inspector & Export
+- Request Panel
+- Response Panel
+- JSON Viewer
+- Redaction Notice
+- OpenAPI Preview
+- Export Actions
+- Export History
+- Collection List
+- Collection Detail
+- Export Download Controls
+
+### Settings
+- Environment Profiles
+- Redaction Rules Editor
+- Retention Limits
+- Replay Guardrails
+
+---
+
+## 6) Zustände (global)
+
+- loading
+- empty
+- error
+- offline
+- read_only
+
+---
+
+## 7) Stitch-Fehlertoleranz (wichtig)
+
+Wenn Stitch Prompts ungenau umsetzt:
+
+1. Prompt verkleinern (nur 1 Komponente)
+2. Explizite Maße nennen (z. B. Sidebar 240px)
+3. „Do not redesign“ ergänzen
+4. Erst Struktur, dann Farben, dann States
+5. Komponenten umbenennen statt neu generieren lassen
+
+**Fallback-Formel:**
+
+> Keep existing layout. Only modify component `<NAME>`. Do not change theme, spacing, or navigation.
+
+---
+
+## 8) Daten-Mapping (für spätere Bindung)
+
+- `GET /_therapi/health` → Topbar Status, Proxy Status Card
+- `GET /_therapi/summary` → Endpoint Overview Table, Endpoint List
+- `GET /_therapi/drift` → Drift Timeline, Drift Diff Table
+- `GET /_therapi/openapi.json` → OpenAPI Preview
+- `GET /_therapi/collections.json` → Collection List, Collection Detail
+
+---
+
+## 9) Definition of Done für UI v0
+
+- Alle 7 Seiten in Navigation erreichbar
+- Jeder Screen hat Loading/Empty/Error-State
+- Drift-Screen zeigt Added/Removed klar getrennt
+- Inspector zeigt Redaction-Hinweis sichtbar
+- OpenAPI Export-Aktionen im UI vorhanden
+- Konsistente Tokens auf allen Screens
+
+---
+
+## 10) Übernahme aus `lootziffer666/design_system`
+
+Ja — damit kann man **sehr gut arbeiten**. Für THERAPI sind diese Leitlinien direkt nutzbar:
+
+- **Start with feeling, not features** → zuerst Zielwirkung (ruhig, klar, kompetent), dann Komponenten.
+- **Stabile Shell** → Navigation, Topbar und Container nicht pro Screen variieren.
+- **Klare Hierarchie** → ein Fokus pro Seite, sekundäre Inhalte bewusst leiser.
+- **Progressive Disclosure** → Details schrittweise offenlegen statt alles gleichzeitig zeigen.
+- **Kindness without kitsch** → hilfreiche, ruhige Microcopy statt Alarmismus.
+
+Diese Punkte passen vollständig zu einem Discovery-Tool mit hoher Informationsdichte.
+
+---
+
+## 11) Direkt anwendbare Zusatzregeln (für Stitch)
+
+### 11.1 Was Stitch explizit **nicht** tun soll
+
+> Do not redesign the app shell.
+> Do not add KPI cards without clear user action.
+> Do not increase visual noise (extra badges, gradients, decorative charts).
+> Do not change navigation labels/order.
+
+### 11.2 Qualitätsregeln pro Screen
+
+- **Ein Screen, eine Hauptaussage** (primary panel klar sichtbar)
+- **States Pflicht:** loading, empty, error, success, read_only
+- **Fehler führen zur Lösung** (jede Fehlermeldung mit nächstem Schritt)
+- **Sicherheitsstatus sichtbar** (Redaction, Export, destructive actions)
+
+### 11.3 Tonalität (Microcopy)
+
+- präzise
+- ruhig
+- respektvoll
+- handlungsorientiert
+- ohne Schuldzuweisung
+
+---
+
+## 12) Prompt-Block „Design Integrity Check“
+
+Nach jeder Stitch-Iteration einmal ausführen:
+
+> Evaluate this screen against five checks and return PASS/FAIL with one sentence each:
+> 1) Stable shell preserved
+> 2) Clear information hierarchy
+> 3) Progressive disclosure applied
+> 4) Low-noise visual density
+> 5) Kind, actionable microcopy
+> If any check fails, propose only minimal edits and do not redesign the full screen.
+
+Damit werden die Guidelines aus `lootziffer666/design_system` operationalisiert, ohne den bisherigen THERAPI-Aufbau zu brechen.
+
+---
+
+## 13) Stitch-Rettungsplan (nur 2 stabile Layouts als Basis)
+
+Wenn Stitch nur zwei konsistente Frames liefert, behandeln wir sie als **Master-Templates** und bauen alles andere durch minimale Varianten:
+
+- Template A: `control_panel_updated_branding`
+- Template B: `endpoint_explorer_corrected`
+
+**Regel:** Kein Redesign mehr. Nur Inhalte austauschen, Bereiche ein-/ausblenden, Spaltenbreiten anpassen.
+
+### 13.1 Master-Template A (`control_panel_updated_branding`)
+Nutzen für:
+- Control Panel
+- OpenAPI Export
+- Collections Export
+- Settings
+
+Mapping:
+- Linke Card-Spalte bleibt „Kontext/Status“
+- Rechte Hauptfläche wird je nach Seite ersetzt:
+  - OpenAPI Export: Preview + Export Actions + History
+  - Collections Export: Liste + Detail + Download Actions
+  - Settings: 4 Sektionen als gestapelte Cards
+
+### 13.2 Master-Template B (`endpoint_explorer_corrected`)
+Nutzen für:
+- Endpoint Explorer
+- Schema Drift
+- Capture Inspector
+
+Mapping:
+- Linke Spalte = Filter/Navigation
+- Mitte = Liste oder Timeline
+- Rechts = Detail/Inspector
+
+Spezifisch:
+- Schema Drift: Mitte = Version Timeline, rechts = Added/Removed Diff
+- Capture Inspector: Mitte = Request-Liste, rechts = Request/Response Split
+
+---
+
+## 14) Zero-Redesign Prompt-Set (für frustfreie Iteration)
+
+### 14.1 Globale Sicherheitsformel (immer voranstellen)
+
+> Keep existing layout and spacing. Do not redesign shell, typography, colors, or navigation. Only replace content blocks listed below.
+
+### 14.2 From Template A → OpenAPI Export
+
+> Use `control_panel_updated_branding` as base. Keep all layout geometry. Rename right main panel to `OpenAPI Export`. Add components in this order: `OpenAPI Preview`, `Export Actions`, `Export History`. Do not move left status/config cards.
+
+### 14.3 From Template A → Settings
+
+> Use `control_panel_updated_branding` as base. Keep all layout geometry. Replace right panel with four stacked cards: `Environment Profiles`, `Redaction Rules Editor`, `Retention Limits`, `Replay Guardrails`. Keep visual hierarchy low-noise.
+
+### 14.4 From Template B → Schema Drift
+
+> Use `endpoint_explorer_corrected` as base. Keep all layout geometry. Middle column becomes `Version Timeline`. Right column becomes `Drift Diff` with two groups: `Added Paths` and `Removed Paths`. Keep left filter/navigation unchanged.
+
+### 14.5 From Template B → Capture Inspector
+
+> Use `endpoint_explorer_corrected` as base. Keep all layout geometry. Middle column lists captures. Right column is split vertically into `Request` and `Response` panels with JSON viewers and copy actions.
+
+---
+
+## 15) Done-Definition für „gerettet statt perfekt“
+
+Ein Screen gilt als fertig, wenn:
+
+1. Er von Template A oder B ableitbar ist (ohne Redesign).
+2. Navigation/Shell unverändert bleibt.
+3. Datenobjekte klar lesbar sind (Status, Liste, Detail, Aktion).
+4. Loading/Empty/Error-State vorhanden ist.
+5. Maximal 1 Iteration nötig war, um ihn korrekt zu machen.
+
+Damit wird Stitch als **Layout-Kopierer** genutzt, nicht als Co-Designer.
