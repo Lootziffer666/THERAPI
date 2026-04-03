@@ -1,4 +1,4 @@
-# therAPI (MVP)
+# THERAPI (MVP)
 
 Dieses Repository enthält einen MVP für das im PRD definierte API-Discovery-Tool mit den vier geplanten Kernschritten:
 
