@@ -1,32 +1,3 @@
- diff --git a/README.md b/README.md
-index e139442..5107fe6 100644
---- a/README.md
-+++ b/README.md
-@@ -53,3 +53,23 @@ Beim Speichern von Captures werden sensible Header/Felder redigiert (`[REDACTED]
- 
- ```bash
- PYTHONPATH=src python -m unittest discover -s tests -v
--
- 
-+#\# AutoListener (automatischer Replay-Listener)
-+#
-#+Mit dem AutoListener kannst du vorbereitete Requests zyklisch durch den therAPI-Proxy feuern, damit Captures/Schemas automatisch wachsen.
-#
-#+Beispiel-Targets liegen in docs/autolistener.targets.example.json.
-#+Im Control Panel (/\_therapi/ui) gibt es dafür jetzt eine eigene AutoListener-Sektion inkl. Startkommando und Download-Link für die Targets (/\_therapi/autolistener.targets.json).
-#
-#+```bash
-#+\# 1) Proxy starten (Terminal 1)
-#+PYTHONPATH=src python -m therapi.proxy --host 127.0.0.1 --port 8080
-#
-#+\# 2) AutoListener starten (Terminal 2)
-#+PYTHONPATH=src python -m therapi.autolistener \
-- \--proxy-base-url http://127.0.0.1:8080 \
-- \--targets-file docs/autolistener.targets.example.json \
-- \--cycles 0 \
-- \--interval-sec 30 \
-- \--report-file .therapi/autolistener\_report.jsonl
-#+```
 diff --git a/docs/autolistener.targets.example.json b/docs/autolistener.targets.example.json
 new file mode 100644
 index 0000000..ae7d5e9
