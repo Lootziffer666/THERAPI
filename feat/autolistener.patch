@@ -1,0 +1,7 @@
+diff --git a/README.md b/README.md
+index e139442..5107fe6 100644
+--- a/README.md
++++ b/README.md
+@@ -53,3 +53,23 @@ Beim Speichern von Captures werden sensible Header/Felder redigiert (`[REDACTED]
+ ```bash
+ PYTHONPATH=src python -m unittest discover -s tests -v
