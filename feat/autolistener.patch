@@ -1,0 +1,404 @@
+diff --git a/README.md b/README.md
+index e139442..5107fe6 100644
+--- a/README.md
++++ b/README.md
+@@ -53,3 +53,23 @@ Beim Speichern von Captures werden sensible Header/Felder redigiert (`[REDACTED]
+ ```bash
+ PYTHONPATH=src python -m unittest discover -s tests -v
+ diff --git a/README.md b/README.md
+index e139442..5107fe6 100644
+--- a/README.md
++++ b/README.md
+@@ -53,3 +53,23 @@ Beim Speichern von Captures werden sensible Header/Felder redigiert (`[REDACTED]
+ 
+ ```bash
+ PYTHONPATH=src python -m unittest discover -s tests -v
+-
+ 
++#\# AutoListener (automatischer Replay-Listener)
++#
+#+Mit dem AutoListener kannst du vorbereitete Requests zyklisch durch den therAPI-Proxy feuern, damit Captures/Schemas automatisch wachsen.
+#
+#+Beispiel-Targets liegen in docs/autolistener.targets.example.json.
+#+Im Control Panel (/\_therapi/ui) gibt es dafür jetzt eine eigene AutoListener-Sektion inkl. Startkommando und Download-Link für die Targets (/\_therapi/autolistener.targets.json).
+#
+#+```bash
+#+\# 1) Proxy starten (Terminal 1)
+#+PYTHONPATH=src python -m therapi.proxy --host 127.0.0.1 --port 8080
+#
+#+\# 2) AutoListener starten (Terminal 2)
+#+PYTHONPATH=src python -m therapi.autolistener \
+- \--proxy-base-url http://127.0.0.1:8080 \
+- \--targets-file docs/autolistener.targets.example.json \
+- \--cycles 0 \
+- \--interval-sec 30 \
+- \--report-file .therapi/autolistener\_report.jsonl
+#+```
+diff --git a/docs/autolistener.targets.example.json b/docs/autolistener.targets.example.json
+new file mode 100644
+index 0000000..ae7d5e9
+--- /dev/null
++++ b/docs/autolistener.targets.example.json
+@@ -0,0 +1,21 @@
++{
+- "targets": [
+- {
+- "name": "httpbin get",
+- "method": "GET",
+- "url": "[https://httpbin.org/get?hello=therapi](https://httpbin.org/get?hello=therapi)"
+- },
+- {
+- "name": "httpbin post",
+- "method": "POST",
+- "url": "[https://httpbin.org/post](https://httpbin.org/post)",
+- "headers": {
+- "X-Therapi-Probe": "1"
+- },
+- "json": {
+- "source": "therapi",
+- "mode": "autolistener"
+- }
+- }
+- ]
++}
+diff --git a/src/therapi/autolistener.py b/src/therapi/autolistener.py
+new file mode 100644
+index 0000000..24c1d11
+--- /dev/null
++++ b/src/therapi/autolistener.py
+@@ -0,0 +1,151 @@
++from future import annotations
+-
++import argparse
++import json
++import time
++import urllib.parse
++import urllib.request
++from dataclasses import dataclass
++from pathlib import Path
++from typing import Any
++
++
++@dataclass
++class ListenerTarget:
+- url: str
+- method: str = "GET"
+- headers: dict[str, str] | None = None
+- json\_body: Any | None = None
+- name: str | None = None
+-
+-
++def load\_targets(path: str) -> list[ListenerTarget]:
+- payload = json.loads(Path(path).read\_text(encoding="utf-8"))
+- raw\_targets = payload["targets"] if isinstance(payload, dict) else payload
+- targets: list[ListenerTarget] = []
+- for item in raw\_targets:
+-   if not isinstance(item, dict):
+-       continue
+-   url = str(item.get("url", "")).strip()
+-   if not url:
+-       continue
+-   targets.append(
+-       ListenerTarget(
+-           url=url,
+-           method=str(item.get("method", "GET")).upper(),
+-           headers=item.get("headers"),
+-           json\_body=item.get("json"),
+-           name=item.get("name"),
+-       )
+-   )
+- return targets
+-
+-
++def run\_once(
+- proxy\_base\_url: str,
+- targets: list[ListenerTarget],
+- timeout\_sec: float = 15.0,
++) -> list[dict[str, Any]]:
+- base = proxy\_base\_url.rstrip("/")
+- results: list[dict[str, Any]] = []
+- for target in targets:
+-   encoded\_url = urllib.parse.quote(target.url, safe="")
+-   proxy\_url = f"{base}/?url={encoded\_url}"
+-   body: bytes | None = None
+-   if target.json\_body is not None:
+-       body = json.dumps(target.json\_body).encode("utf-8")
+-   request = urllib.request.Request(
+-       url=proxy\_url,
+-       method=target.method,
+-       data=body,
+-       headers=target.headers or {},
+-   )
+-   if body is not None and "Content-Type" not in request.headers:
+-       request.add\_header("Content-Type", "application/json")
+-
+-   started = time.time()
+-   try:
+-       with urllib.request.urlopen(request, timeout=timeout\_sec) as response:
+-           status = response.status
+-           response.read()
+-       results.append(
+-           {
+-               "name": target.name or target.url,
+-               "method": target.method,
+-               "url": target.url,
+-               "status": status,
+-               "ok": 200 <= status < 500,
+-               "duration\_ms": int((time.time() - started) * 1000),
+-               "error": None,
+-           }
+-       )
+-   except Exception as err: \# noqa: BLE001
+-       results.append(
+-           {
+-               "name": target.name or target.url,
+-               "method": target.method,
+-               "url": target.url,
+-               "status": None,
+-               "ok": False,
+-               "duration\_ms": int((time.time() - started) * 1000),
+-               "error": str(err),
+-           }
+-       )
+- return results
+-
+-
++def main() -> None:
+- parser = argparse.ArgumentParser(description="therAPI auto listener/replay helper")
+- parser.add\_argument("--proxy-base-url", default="[http://127.0.0.1:8080](http://127.0.0.1:8080)")
+- parser.add\_argument("--targets-file", required=True)
+- parser.add\_argument("--interval-sec", default=60.0, type=float)
+- parser.add\_argument("--cycles", default=1, type=int, help="0 = infinite loop")
+- parser.add\_argument("--timeout-sec", default=15.0, type=float)
+- parser.add\_argument("--report-file", default=".therapi/autolistener\_report.jsonl")
+- args = parser.parse\_args()
+-
+- targets = load\_targets(args.targets\_file)
+- if not targets:
+- raise SystemExit("No valid targets found in targets-file.")
+-
+- report\_path = Path(args.report\_file)
+- report\_path.parent.mkdir(parents=True, exist\_ok=True)
+-
+- cycle = 0
+- while True:
+- cycle += 1
+- timestamp = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+- results = run\_once(
+- proxy\_base\_url=args.proxy\_base\_url,
+- targets=targets,
+- timeout\_sec=args.timeout\_sec,
+- )
+- ok\_count = sum(1 for item in results if item["ok"])
+- print(f"[{timestamp}] cycle={cycle} ok={ok\_count}/{len(results)}")
+- for item in results:
+- status = item["status"] if item["status"] is not None else "-"
+- name = item["name"]
+- duration = item["duration\_ms"]
+- err = f" error={item['error']}" if item["error"] else ""
+- print(f" - {status} {name} ({duration}ms){err}")
+-
+- with report\_path.open("a", encoding="utf-8") as handle:
+- handle.write(
+- json.dumps(
+- {
+- "ts": timestamp,
+- "cycle": cycle,
+- "results": results,
+- }
+- )
+- + "\n"
+- )
+-
+- if args.cycles > 0 and cycle >= args.cycles:
+- break
+- time.sleep(args.interval\_sec)
+-
+-
++if name == "main":
+- main()
+-
+
+diff --git a/src/therapi/proxy.py b/src/therapi/proxy.py
+index bb5fbeb..3503ff2 100644
+--- a/src/therapi/proxy.py
++++ b/src/therapi/proxy.py
+@@ -7,6 +7,7 @@ import urllib.error
+import urllib.parse
+import urllib.request
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
++from pathlib import Path
+from typing import Any
+ 
+from .openapi import OpenApiGenerator
+@@ -37,14 +38,20 @@ def \_render\_control\_panel(host: str, port: int, target\_base\_url: str | None, sum
+ 
+ table\_html = "".join(rows) or "\<tr\>\<td colspan='4'\>\<em\>No captures yet\</em\>\</td\>\</tr\>"
+ 
+ target\_hint = target\_base\_url or "(none)"
+ 
++autolistener\_targets = json.dumps(\_load\_autolistener\_targets(), indent=2)
++autolistener\_cmd = (
++   "PYTHONPATH=src python -m therapi.autolistener "
++   f"--proxy-base-url http://{host}:{port} "
++   "--targets-file docs/autolistener.targets.example.json "
++   "--cycles 0 --interval-sec 30 "
++   "--report-file .therapi/autolistener\_report.jsonl"
++ )
+    return f"""\<\!doctype html\>
+ 
+ \<html lang='en'\> \<head\>\<meta charset='utf-8'\>\<title\>therAPI Control Panel\</title\>\</head\> @@ -54,9 +61,45 @@ def \_render\_control\_panel(host: str, port: int, target\_base\_url: str | None, sum
+ \<thead\>\<tr\>\<th\>Endpoint\</th\>\<th\>Samples\</th\>\<th\>Versions\</th\>\<th\>Captures\</th\>\</tr\>\</thead\>
+ \<tbody\>{table\_html}\</tbody\>
+ \</table\>
++\<hr style='margin: 2rem 0;'/\>
++\<h2\>AutoListener\</h2\>
++\<p\>Automatischer Replay-Listener, um kontinuierlich Captures/Schemas aufzubauen.\</p\>
++\<p\>\<strong\>Startbefehl:\</strong\>\</p\>
++\<pre style='background:\#f3f4f6;padding:0.75rem;border-radius:6px;overflow:auto;'\>\<code\>{autolistener\_cmd}\</code\>\</pre\>
++\<p\>
++ \<a href='/\_therapi/autolistener.targets.json'\>Download sample targets JSON\</a\>
++\</p\>
++\<p\>\<strong\>Sample targets:\</strong\>\</p\>
++\<pre style='background:\#f3f4f6;padding:0.75rem;border-radius:6px;overflow:auto;'\>\<code\>{autolistener\_targets}\</code\>\</pre\>
+ \</body\>\</html\>"""
+ 
++\def \_load\_autolistener\_targets() -> dict[str, Any]:
+- default\_payload: dict[str, Any] = {
+-   "targets": [
+-       {"name": "httpbin get", "method": "GET", "url": "[https://httpbin.org/get?hello=therapi](https://httpbin.org/get?hello=therapi)"},
+-       {
+-           "name": "httpbin post",
+-           "method": "POST",
+-           "url": "[https://httpbin.org/post](https://httpbin.org/post)",
+-           "headers": {"X-Therapi-Probe": "1"},
+-           "json": {"source": "therapi", "mode": "autolistener"},
+-       },
+-   ]
+- }
+- candidates = [
+-   Path.cwd() / "docs" / "autolistener.targets.example.json",
+-   Path(\_\_file\_\_).resolve().parents[2] / "docs" / "autolistener.targets.example.json",
+- ]
+- for candidate in candidates:
+-   if candidate.exists():
+-       try:
+-           return json.loads(candidate.read\_text(encoding="utf-8"))
+-       except (OSError, json.JSONDecodeError):
+-           return default\_payload
+- return default\_payload
+-
+-
+ 
+ class DiscoveryProxyHandler(BaseHTTPRequestHandler):
+ registry: SchemaRegistry
+ openapi: OpenApiGenerator
+@@ -87,6 +130,9 @@ class DiscoveryProxyHandler(BaseHTTPRequestHandler):
+ )
+ self.\_respond\_html(200, panel)
+ return
+ 
+-   if self.path == "/\_therapi/autolistener.targets.json":
+-       self.\_respond\_json(200, \_load\_autolistener\_targets())
+-       return
+-   self.\_forward()
+- def do\_POST(self) -> None: \# noqa: N802
+diff --git a/tests/test\_autolistener.py b/tests/test\_autolistener.py
+new file mode 100644
+index 0000000..4fb55fb
+--- /dev/null
++++ b/tests/test\_autolistener.py
+@@ -0,0 +1,56 @@
++import json
++import tempfile
++import unittest
++from unittest.mock import patch
+-
++from therapi.autolistener import ListenerTarget, load\_targets, run\_once
++
++
++class \_FakeResponse:
+- def init(self, status: int = 200):
+- self.status = status
+-
+- def read(self) -> bytes:
+- return b"{}"
+-
+- def enter(self):
+- return self
+-
+- def exit(self, exc\_type, exc, tb):
+- return False
+-
+-
++class AutoListenerTests(unittest.TestCase):
+- def test\_load\_targets\_supports\_dict\_and\_list(self):
+-   with tempfile.NamedTemporaryFile("w+", suffix=".json") as handle:
+-       json.dump({"targets": [{"url": "[https://example.com/a](https://example.com/a)"}, {"url": "[https://example.com/b](https://example.com/b)", "method": "post"}]}, handle)
+-       handle.flush()
+-       targets = load\_targets(handle.name)
+-
+-   self.assertEqual(len(targets), 2)
+-   self.assertEqual(targets[0].method, "GET")
+-   self.assertEqual(targets[1].method, "POST")
+-
+- def test\_run\_once\_hits\_proxy\_with\_encoded\_url(self):
+-   target = ListenerTarget(url="[https://api.example.com/users?id=1](https://api.example.com/users?id=1)", method="GET")
+-   captured = {}
+-
+-   def fake\_urlopen(request, timeout=0):
+-       captured["url"] = request.full\_url
+-       captured["timeout"] = timeout
+-       return \_FakeResponse(204)
+-
+-   with patch("urllib.request.urlopen", fake\_urlopen):
+-       results = run\_once("[http://127.0.0.1:8080](http://127.0.0.1:8080)", [target], timeout\_sec=9.0)
+-
+-   self.assertEqual(len(results), 1)
+-   self.assertTrue(results[0]["ok"])
+-   self.assertEqual(results[0]["status"], 204)
+-   self.assertIn("[http://127.0.0.1:8080/?url=](http://127.0.0.1:8080/?url=)", captured["url"])
+-   self.assertIn("https%3A%2F%2Fapi.example.com%2Fusers%3Fid%3D1", captured["url"])
+-   self.assertEqual(captured["timeout"], 9.0)
+-
+-
++if name == "main":
+- unittest.main()
+-
+diff --git a/tests/test\_proxy\_ui.py b/tests/test\_proxy\_ui.py
+new file mode 100644
+index 0000000..c3c70e3
+--- /dev/null
++++ b/tests/test\_proxy\_ui.py
+@@ -0,0 +1,27 @@
++import unittest
++
++from therapi.proxy import \_load\_autolistener\_targets, \_render\_control\_panel
++
++
++class ProxyUiTests(unittest.TestCase):
+- def test\_control\_panel\_contains\_autolistener\_section(self):
+-   html = \_render\_control\_panel(
+-       host="127.0.0.1",
+-       port=8080,
+-       target\_base\_url=None,
+-       summary={},
+-   )
+-   self.assertIn("AutoListener", html)
+-   self.assertIn("/\_therapi/autolistener.targets.json", html)
+-   self.assertIn("python -m therapi.autolistener", html)
+-
+- def test\_autolistener\_targets\_payload\_shape(self):
+-   payload = \_load\_autolistener\_targets()
+-   self.assertIn("targets", payload)
+-   self.assertTrue(isinstance(payload["targets"], list))
+-   self.assertGreaterEqual(len(payload["targets"]), 1)
+-
+-
++if name == "main":
+- unittest.main()
+-
+
+
+
+
