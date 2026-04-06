@@ -7,7 +7,6 @@
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -154,7 +153,7 @@
 <!-- Baseline Item 3 -->
 <div class="p-4 bg-surface-container-lowest rounded-lg border border-transparent hover:border-slate-200 transition-all cursor-pointer">
 <div class="flex justify-between items-start mb-2">
-<span class="text-[10px] font-bold uppercase tracking-wider text-slate-500 px-2 py-0.5 bg-slate-100 rounded">Raw_JSON</span>
+<span class="text-[10px] font-bold uppercase tracking-wider text-slate-500 px-2 py-0.5 bg-slate-100 rounded">v3.2 → v3.3</span>
 <span class="text-[10px] font-medium text-slate-400">4 hours ago</span>
 </div>
 <h3 class="font-semibold text-sm mb-1 text-on-surface">Inventory API</h3>
@@ -269,7 +268,6 @@
 </div>
 <!-- Drift Analysis Panel -->
 <div class="col-span-12 xl:col-span-5 bg-surface-container-lowest p-6 rounded-lg border border-outline-variant/10 shadow-[0px_4px_20px_rgba(0,81,71,0.05)]">
-<div class="bg-surface-container-lowest p-6 rounded-lg border border-outline-variant/10 shadow-[0px_4px_20px_rgba(0,81,71,0.05)]">
 <h3 class="text-sm font-bold uppercase tracking-widest text-slate-500 mb-4">Drift Analysis</h3>
 <div class="space-y-4">
 <div>
@@ -297,14 +295,13 @@
 </label>
 </div>
 </div>
-</div>
-<!-- Image Preview (Asset) -->
-<div class="flex-1 rounded-lg overflow-hidden relative group">
-<img class="w-full h-full object-cover" data-alt="Abstract architectural rendering of sleek interlocking white blocks with mint green glow under cold studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCrFXCoH1eZ93KYq_pYtZRjI9B6vqE11d5LhNxUH55j-Pq9IKeEtRorRzVR95eDGH9X7epEKAnxsWIC1dGqG8ha08V3PIijSiYGBTvzHNDwM6H3PxqSCEFMI-z2R3K8viKWScIcc_6IQSVOXZFCmyUCDmz-49NJJ9ydI15_PQhL5EKczU4hXsvJgUtV3ehkcevuhZ2PCUoBBXKbIhz2nAy8Lzkp_2OKgojXnjpmFz2sD-FiBlt9-Bi3wPv1U0Zp8cB5-XzH_uoGxVw"/>
-<div class="absolute inset-0 bg-primary/20 mix-blend-multiply group-hover:bg-primary/10 transition-colors"></div>
-<div class="absolute bottom-4 left-4">
-<span class="text-[10px] font-bold text-white uppercase tracking-[0.3em]">Drift Review Ready</span>
-</div>
+<div class="mt-5 border-t border-outline-variant/20 pt-4">
+<h4 class="text-xs font-bold uppercase tracking-widest text-slate-500 mb-3">Breaking Change Highlights</h4>
+<ul class="space-y-2 text-xs text-on-surface">
+<li class="flex items-start gap-2"><span class="material-symbols-outlined text-red-500 text-sm mt-0.5">warning</span><span><span class="font-semibold">POST /v1/auth/login</span>: <code class="font-mono text-[11px] bg-slate-100 px-1 py-0.5 rounded">tenantId</code> changed from optional to required.</span></li>
+<li class="flex items-start gap-2"><span class="material-symbols-outlined text-red-500 text-sm mt-0.5">warning</span><span><span class="font-semibold">POST /v1/auth/refresh</span>: response field <code class="font-mono text-[11px] bg-slate-100 px-1 py-0.5 rounded">expiresAt</code> removed.</span></li>
+<li class="flex items-start gap-2"><span class="material-symbols-outlined text-amber-500 text-sm mt-0.5">info</span><span><span class="font-semibold">PATCH /v1/users/{id}</span>: enum <code class="font-mono text-[11px] bg-slate-100 px-1 py-0.5 rounded">status</code> added value <code class="font-mono text-[11px] bg-slate-100 px-1 py-0.5 rounded">pending_review</code>.</span></li>
+</ul>
 </div>
 </div>
 <!-- Footnote / Log -->

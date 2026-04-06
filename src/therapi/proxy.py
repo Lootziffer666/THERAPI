@@ -3,15 +3,20 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import urllib.error
 import urllib.parse
 import urllib.request
+from pathlib import Path
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from typing import Any
 
+from .ai_clients import build_insight_engine
+from .listener import AutoListener
 from .openapi import OpenApiGenerator
 from .redaction import redact_headers, redact_json
 from .registry import SchemaRegistry
+from .service_directory import ServiceDirectory
 
 
 def parse_json_if_possible(raw: bytes) -> Any | None:
@@ -23,44 +28,54 @@ def parse_json_if_possible(raw: bytes) -> Any | None:
         return None
 
 
-def _render_control_panel(host: str, port: int, target_base_url: str | None, summary: dict[str, Any]) -> str:
-    rows = []
-    for key, record in summary.items():
-        rows.append(
-            "<tr>"
-            f"<td><code>{key}</code></td>"
-            f"<td>{record['samples']}</td>"
-            f"<td>{len(record['versions'])}</td>"
-            f"<td>{record['captures']}</td>"
-            "</tr>"
-        )
+UI_ROOT = Path(__file__).resolve().parents[2] / "docs" / "HTML"
+_ALLOWED_UI_FILES = {
+    "control-panel.html",
+    "endpoint-explorer.html",
+    "schema-drift.html",
+    "capture-inspector.html",
+    "openapi-export.html",
+    "collections-export.html",
+    "settings.html",
+    "index.html",
+}
 
-    table_html = "".join(rows) or "<tr><td colspan='4'><em>No captures yet</em></td></tr>"
-    target_hint = target_base_url or "(none)"
-    return f"""<!doctype html>
-<html lang='en'>
-<head><meta charset='utf-8'><title>therAPI Control Panel</title></head>
-<body style='font-family: sans-serif; margin: 2rem;'>
-<h1>therAPI Control Panel</h1>
-<p><strong>Proxy:</strong> http://{host}:{port}</p>
-<p><strong>Configured target base URL:</strong> <code>{target_hint}</code></p>
-<p>
-  <a href='/_therapi/summary'>Summary JSON</a> |
-  <a href='/_therapi/drift'>Drift JSON</a> |
-  <a href='/_therapi/openapi.json'>OpenAPI Export</a> |
-  <a href='/_therapi/collections.json'>Collections Export</a>
-</p>
-<table border='1' cellspacing='0' cellpadding='6'>
-<thead><tr><th>Endpoint</th><th>Samples</th><th>Versions</th><th>Captures</th></tr></thead>
-<tbody>{table_html}</tbody>
-</table>
-</body></html>"""
+
+def _ui_html_filename(path: str) -> str | None:
+    if path in {"/_therapi/ui", "/_therapi/ui/"}:
+        return "control-panel.html"
+    prefix = "/_therapi/ui/"
+    if not path.startswith(prefix):
+        return None
+    candidate = path[len(prefix) :]
+    if not candidate or "/" in candidate or ".." in candidate:
+        return None
+    return candidate
+
+
+def _rewrite_ui_links(html: str) -> str:
+    def repl(match: re.Match[str]) -> str:
+        filename = match.group(1)
+        return f'href="/_therapi/ui/{filename}"'
+
+    return re.sub(r'href="([a-z0-9\-]+\.html)"', repl, html, flags=re.IGNORECASE)
+
+
+def _load_ui_page(filename: str) -> str | None:
+    if filename not in _ALLOWED_UI_FILES:
+        return None
+    page = UI_ROOT / filename
+    if not page.is_file():
+        return None
+    return _rewrite_ui_links(page.read_text(encoding="utf-8"))
 
 
 class DiscoveryProxyHandler(BaseHTTPRequestHandler):
     registry: SchemaRegistry
     openapi: OpenApiGenerator
     target_base_url: str | None = None
+    listener: AutoListener | None = None
+    directory: ServiceDirectory | None = None
 
     def do_GET(self) -> None:  # noqa: N802
         if self.path == "/_therapi/health":
@@ -78,18 +93,75 @@ class DiscoveryProxyHandler(BaseHTTPRequestHandler):
         if self.path == "/_therapi/collections.json":
             self._respond_json(200, self.registry.export_collections())
             return
-        if self.path == "/_therapi/ui":
-            panel = _render_control_panel(
-                self.server.server_address[0],
-                self.server.server_address[1],
-                self.target_base_url,
-                self.registry.summary(),
-            )
-            self._respond_html(200, panel)
+        if self.path == "/_therapi/listener":
+            status = self.listener.status() if self.listener else {"running": False, "configured": False}
+            self._respond_json(200, status)
+            return
+        if self.path == "/_therapi/providers":
+            self._respond_json(200, {"providers": self.directory.list_providers() if self.directory else []})
+            return
+        if self.path == "/_therapi/phonebook":
+            self._respond_json(200, {"apis": self.directory.list_apis() if self.directory else []})
+            return
+        if self.path == "/_therapi/insights":
+            if not self.listener:
+                self._respond_json(200, {"recommendation": "Listener is disabled", "source": "local-fallback"})
+                return
+            self._respond_json(200, self.listener.latest_insights())
+            return
+        ui_filename = _ui_html_filename(urllib.parse.urlsplit(self.path).path)
+        if ui_filename is not None:
+            page = _load_ui_page(ui_filename)
+            if page is None:
+                self._respond_json(404, {"error": "ui page not found"})
+                return
+            self._respond_html(200, page)
             return
         self._forward()
 
     def do_POST(self) -> None:  # noqa: N802
+        if self.path == "/_therapi/providers":
+            payload = self._read_json_body()
+            if payload is None:
+                return
+            if not self.directory:
+                self._respond_json(500, {"error": "directory is not configured"})
+                return
+            try:
+                created = self.directory.add_provider(
+                    name=str(payload["name"]),
+                    endpoint=str(payload["endpoint"]),
+                    model=payload.get("model"),
+                    api_key_env=payload.get("api_key_env"),
+                    headers=payload.get("headers"),
+                )
+            except (KeyError, ValueError, TypeError) as err:
+                self._respond_json(400, {"error": str(err)})
+                return
+            self._respond_json(201, created)
+            return
+
+        if self.path == "/_therapi/phonebook":
+            payload = self._read_json_body()
+            if payload is None:
+                return
+            if not self.directory:
+                self._respond_json(500, {"error": "directory is not configured"})
+                return
+            try:
+                created = self.directory.add_api(
+                    name=str(payload["name"]),
+                    base_url=str(payload["base_url"]),
+                    category=str(payload.get("category", "general")),
+                    notes=str(payload.get("notes", "")),
+                    services=payload.get("services"),
+                )
+            except (KeyError, ValueError, TypeError) as err:
+                self._respond_json(400, {"error": str(err)})
+                return
+            self._respond_json(201, created)
+            return
+
         self._forward()
 
     def do_PUT(self) -> None:  # noqa: N802
@@ -172,6 +244,19 @@ class DiscoveryProxyHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(response_body)
 
+    def _read_json_body(self) -> dict[str, Any] | None:
+        content_length = int(self.headers.get("Content-Length", "0"))
+        raw = self.rfile.read(content_length) if content_length > 0 else b""
+        try:
+            decoded = json.loads(raw.decode("utf-8") if raw else "{}")
+        except (UnicodeDecodeError, json.JSONDecodeError):
+            self._respond_json(400, {"error": "invalid JSON payload"})
+            return None
+        if not isinstance(decoded, dict):
+            self._respond_json(400, {"error": "payload must be a JSON object"})
+            return None
+        return decoded
+
     def _respond_json(self, status: int, payload: dict[str, Any]) -> None:
         encoded = json.dumps(payload, indent=2).encode("utf-8")
         self.send_response(status)
@@ -195,12 +280,50 @@ def main() -> None:
     parser.add_argument("--port", default=8080, type=int)
     parser.add_argument("--store", default=".therapi/registry.json")
     parser.add_argument("--target-base-url", default=os.environ.get("THERAPI_TARGET_BASE_URL"))
+    parser.add_argument("--listener-interval", default=int(os.environ.get("THERAPI_LISTENER_INTERVAL", "300")), type=int)
+    parser.add_argument("--ai-provider", default=os.environ.get("THERAPI_AI_PROVIDER"))
+    parser.add_argument("--ai-api-key", default=os.environ.get("THERAPI_AI_API_KEY"))
+    parser.add_argument("--ai-model", default=os.environ.get("THERAPI_AI_MODEL"))
+    parser.add_argument("--ai-endpoint", default=os.environ.get("THERAPI_AI_ENDPOINT"))
+    parser.add_argument("--ai-provider-profile", default=os.environ.get("THERAPI_AI_PROVIDER_PROFILE"))
+    parser.add_argument("--directory-file", default=os.environ.get("THERAPI_DIRECTORY_FILE", ".therapi/phonebook.json"))
     args = parser.parse_args()
 
     registry = SchemaRegistry(args.store)
+    directory = ServiceDirectory(args.directory_file)
     DiscoveryProxyHandler.registry = registry
     DiscoveryProxyHandler.openapi = OpenApiGenerator(registry)
     DiscoveryProxyHandler.target_base_url = args.target_base_url
+    DiscoveryProxyHandler.directory = directory
+
+    provider = args.ai_provider
+    api_key = args.ai_api_key
+    model = args.ai_model
+    endpoint = args.ai_endpoint
+    headers = None
+
+    if args.ai_provider_profile:
+        profile = directory.get_provider(args.ai_provider_profile)
+        if profile is None:
+            raise ValueError(f"unknown provider profile: {args.ai_provider_profile}")
+        provider = "custom"
+        endpoint = profile.get("endpoint")
+        model = model or profile.get("model")
+        key_env = profile.get("api_key_env")
+        if not api_key and key_env:
+            api_key = os.environ.get(key_env)
+        headers = profile.get("headers")
+
+    insight_engine = build_insight_engine(
+        provider=provider,
+        api_key=api_key,
+        model=model,
+        endpoint=endpoint,
+        headers=headers,
+    )
+    listener = AutoListener(registry, interval_seconds=args.listener_interval, insight_engine=insight_engine)
+    listener.start()
+    DiscoveryProxyHandler.listener = listener
 
     server = ThreadingHTTPServer((args.host, args.port), DiscoveryProxyHandler)
     print(f"therAPI discovery proxy listening on http://{args.host}:{args.port}")
