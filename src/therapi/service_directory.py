@@ -4,12 +4,27 @@ import json
 from pathlib import Path
 from typing import Any
 
+DEFAULT_AVV_SERVICES = [
+    {"name": "Arrival board", "wadl_url": "https://auskunft.avv.de/restproxy/arrivalBoard?wadl"},
+    {"name": "Departure board", "wadl_url": "https://auskunft.avv.de/restproxy/departureBoard?wadl"},
+    {"name": "GIS Route by Context", "wadl_url": "https://auskunft.avv.de/restproxy/gisroute?wadl"},
+    {"name": "Interval search", "wadl_url": "https://auskunft.avv.de/restproxy/intervalsearch?wadl"},
+    {"name": "Journey Detail", "wadl_url": "https://auskunft.avv.de/restproxy/journeyDetail?wadl"},
+    {"name": "Location search by coordinate", "wadl_url": "https://auskunft.avv.de/restproxy/location.nearbystops?wadl"},
+    {"name": "Location search by name", "wadl_url": "https://auskunft.avv.de/restproxy/location.name?wadl"},
+    {"name": "Reconstruction", "wadl_url": "https://auskunft.avv.de/restproxy/db_recon?wadl"},
+    {"name": "Trias", "wadl_url": "https://auskunft.avv.de/restproxy/trias?wadl"},
+    {"name": "Trip search", "wadl_url": "https://auskunft.avv.de/restproxy/trip?wadl"},
+    {"name": "XSD", "wadl_url": "https://auskunft.avv.de/restproxy/xsd"},
+]
+
 DEFAULT_APIS = [
     {
         "name": "AVV",
-        "base_url": "https://www.avv.de",
+        "base_url": "https://auskunft.avv.de/restproxy",
         "category": "transit",
         "notes": "Aachener Verkehrsverbund",
+        "services": DEFAULT_AVV_SERVICES,
     },
     {
         "name": "DB",
@@ -83,7 +98,14 @@ class ServiceDirectory:
         self.save()
         return record
 
-    def add_api(self, name: str, base_url: str, category: str = "general", notes: str = "") -> dict[str, Any]:
+    def add_api(
+        self,
+        name: str,
+        base_url: str,
+        category: str = "general",
+        notes: str = "",
+        services: list[dict[str, str]] | None = None,
+    ) -> dict[str, Any]:
         if any(entry["name"].lower() == name.lower() for entry in self._apis):
             raise ValueError(f"api '{name}' already exists")
         record = {
@@ -91,6 +113,7 @@ class ServiceDirectory:
             "base_url": base_url,
             "category": category,
             "notes": notes,
+            "services": services or [],
         }
         self._apis.append(record)
         self.save()

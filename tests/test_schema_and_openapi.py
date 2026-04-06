@@ -135,10 +135,17 @@ class ServiceDirectoryTests(unittest.TestCase):
     def test_defaults_include_transit_phonebook_entries(self):
         with tempfile.TemporaryDirectory() as tmpdir:
             directory = ServiceDirectory(f"{tmpdir}/phonebook.json")
-            names = {item["name"] for item in directory.list_apis()}
+            apis = directory.list_apis()
+            names = {item["name"] for item in apis}
             self.assertIn("AVV", names)
             self.assertIn("DB", names)
             self.assertIn("Transitous", names)
+
+            avv = next(item for item in apis if item["name"] == "AVV")
+            self.assertEqual(len(avv["services"]), 11)
+            wadl_urls = {service["wadl_url"] for service in avv["services"]}
+            self.assertIn("https://auskunft.avv.de/restproxy/arrivalBoard?wadl", wadl_urls)
+            self.assertIn("https://auskunft.avv.de/restproxy/xsd", wadl_urls)
 
     def test_can_add_multiple_custom_providers(self):
         with tempfile.TemporaryDirectory() as tmpdir:

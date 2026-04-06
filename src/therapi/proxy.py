@@ -154,6 +154,7 @@ class DiscoveryProxyHandler(BaseHTTPRequestHandler):
                     base_url=str(payload["base_url"]),
                     category=str(payload.get("category", "general")),
                     notes=str(payload.get("notes", "")),
+                    services=payload.get("services"),
                 )
             except (KeyError, ValueError, TypeError) as err:
                 self._respond_json(400, {"error": str(err)})

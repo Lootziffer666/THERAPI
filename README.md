@@ -60,7 +60,7 @@ Request/Response werden aufgezeichnet und pro Endpoint (`METHOD + path`) aggregi
 - `GET /_therapi/insights` – automatische Drift-Empfehlungen (AI oder Fallback)
 - `GET /_therapi/providers` – gespeicherte Custom-AI-Provider
 - `POST /_therapi/providers` – neuen Custom-AI-Provider speichern
-- `GET /_therapi/phonebook` – API-Telefonbuch (u. a. AVV, DB, Transitous)
+- `GET /_therapi/phonebook` – API-Telefonbuch (u. a. AVV, DB, Transitous; AVV inkl. WADL-Servicekatalog)
 - `POST /_therapi/phonebook` – API-Eintrag hinzufügen
 - `GET /_therapi/summary` – Endpoints, Samples, Versionsstände
 - `GET /_therapi/drift` – Schema-Änderungen zwischen Versionen
@@ -95,3 +95,6 @@ curl -X POST http://127.0.0.1:8080/_therapi/phonebook \
   -H "Content-Type: application/json" \
   -d '{"name":"Meine API","base_url":"https://api.example.com","category":"catchit","notes":"später produktiv"}'
 ```
+
+
+AVV ist bereits mit folgenden Services im Telefonbuch vorbelegt: arrivalBoard, departureBoard, gisroute, intervalsearch, journeyDetail, location.nearbystops, location.name, db_recon, trias, trip, xsd.
